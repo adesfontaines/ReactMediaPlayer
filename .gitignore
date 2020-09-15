@@ -1,0 +1,6 @@
+﻿*.suo
+*.v2
+MusicPlayer.Data/bin
+MusicPlayer.Data/obj
+MusicPlayer.Core/obj
+MusicPlayer.Core/bin/Debug/netcoreapp3.1

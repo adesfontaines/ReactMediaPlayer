@@ -1,0 +1,30 @@
+﻿.main-media-buttons {
+    justify-content: center;
+    text-align:center;
+    align-items: center;
+}
+.left-media-buttons {
+    float: left;
+    text-align: left;
+}
+.right-media-buttons {
+    float: right;
+    text-align: right;
+}
+.media-btn {
+    color: #FFFFFF;
+    line-height: 3rem;
+}
+.media-btn:hover {
+    color: #FFFFFF;
+}
+.footer-player {
+    display:flex;
+}
+.bar
+{
+  transition:none;
+}
+.volumeSlider {
+  width: 140px;
+}

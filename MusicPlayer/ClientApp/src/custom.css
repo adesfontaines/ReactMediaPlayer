@@ -1,0 +1,36 @@
+/* Provide sufficient contrast against white background */
+body {
+  padding-bottom: 108px;
+}
+
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+
+.tracks-list td, .tracks-list th {
+  vertical-align: middle;
+  border: none;
+  padding: 10px;
+}
+
+.tracks-list td {
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
+.musicNameLabel {
+  align-self: center;
+}
