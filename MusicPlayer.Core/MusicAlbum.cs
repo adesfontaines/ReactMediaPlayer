@@ -9,8 +9,10 @@ namespace MusicPlayer.Core
   {
     [Key]
     public Guid Id { get; set; }
-
     [Required, StringLength(128)]
-    public string Name { get; set; }
+    public string Title { get; set; }
+    public string Artists { get; set; }
+    public int Year { get; set; }
+    public string CoverSource { get; set; }
   }
 }

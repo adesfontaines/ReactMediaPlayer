@@ -1,29 +1,33 @@
 ﻿.main-media-buttons {
-    justify-content: center;
-    text-align:center;
-    align-items: center;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 .left-media-buttons {
-    float: left;
-    text-align: left;
+  float: left;
+  text-align: left;
 }
 .right-media-buttons {
-    float: right;
-    text-align: right;
+  float: right;
+  text-align: right;
 }
 .media-btn {
-    color: #FFFFFF;
-    line-height: 3rem;
+  color: #ffffff;
+  line-height: 3rem;
 }
 .media-btn:hover {
-    color: #FFFFFF;
+  color: #ffffff;
+}
+footer {
+  z-index: 10;
 }
 .footer-player {
-    display:flex;
+  display: flex;
+  z-index: 9;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 }
-.bar
-{
-  transition:none;
+.bar {
+  transition: none;
 }
 .volumeSlider {
   width: 140px;

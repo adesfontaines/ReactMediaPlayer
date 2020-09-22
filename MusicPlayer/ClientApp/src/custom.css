@@ -1,10 +1,15 @@
 /* Provide sufficient contrast against white background */
 body {
-  padding-bottom: 108px;
+  padding-bottom: 75px;
+  background: #f4f7fa;
 }
 
 a {
   color: #0366d6;
+}
+
+.appTitle {
+  color: #ffffff;
 }
 
 code {
@@ -33,4 +38,9 @@ code {
 
 .musicNameLabel {
   align-self: center;
+}
+.albumCardMedia
+{
+  width: 171px;
+  height: 171px;
 }

@@ -10,7 +10,7 @@ type MusicPlayerProps =
   & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
   & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
 
-class MusicPlayerDriver extends React.PureComponent<MusicPlayerProps> {
+class MusicPlayerEngine extends React.PureComponent<MusicPlayerProps> {
   public player: ReactHowler | undefined;
   constructor(props: any) {
     super(props);
@@ -20,12 +20,6 @@ class MusicPlayerDriver extends React.PureComponent<MusicPlayerProps> {
     this.handleOnPlay = this.handleOnPlay.bind(this);
     this.step = this.step.bind(this);
   } 
-
-  //player: ReactHowler = new ReactHowler({
-  //  src: (this.props.tracksQueue.length > 0
-  //    ? this.props.tracksQueue[this.props.tracksQueuePosition]
-  //    : "http://goldfirestudios.com/proj/howlerjs/sound.ogg")
-  //});
 
   render() {
     return (
@@ -37,14 +31,13 @@ class MusicPlayerDriver extends React.PureComponent<MusicPlayerProps> {
         playing={this.props.isPlaying}
         loop={this.props.isRepeat}
         volume={this.props.volume}
-        html5={true}
+        html5={false}
         onLoad={this.handleOnLoad}
         onEnd={this.handleOnEnd}
         onPlay={this.handleOnPlay}
     />);
   }
   step() {
-    //this.props.updateTime(this.props.playerInstance.howler.seek().valueOf());
     // If the sound is still playing, continue stepping.
     if (this.player !== undefined && this.props.isPlaying) {
       this.props.updateTimeProgression(this.player.seek());
@@ -59,7 +52,6 @@ class MusicPlayerDriver extends React.PureComponent<MusicPlayerProps> {
   }
 
   public handleOnPlay() {
-    console.log("Start playing");
     this.step();
   }
 
@@ -80,6 +72,5 @@ class MusicPlayerDriver extends React.PureComponent<MusicPlayerProps> {
   }
 }
 export default connect(
-  (state: ApplicationState) => state.musicPlayer, // Selects which state properties are merged into the component's props
-  MusicPlayerStore.actionCreators // Selects which action creators are merged into the component's props
-)(MusicPlayerDriver as any);
+  (state: ApplicationState) => state.musicPlayer,
+  MusicPlayerStore.actionCreators)(MusicPlayerEngine as any);

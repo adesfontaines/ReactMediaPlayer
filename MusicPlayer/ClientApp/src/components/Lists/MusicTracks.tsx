@@ -5,142 +5,108 @@ import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../../store';
 import * as MusicTracksStore from '../../store/MusicTracks';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core/';
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles
-} from "@material-ui/core/styles";
+import { Skeleton } from '@material-ui/lab';
+import { Pagination } from 'reactstrap';
 
 type MusicTracksProps =
   MusicTracksStore.MusicTracksState // ... state we've requested from the Redux store
   & typeof MusicTracksStore.actionCreators // ... plus action creators we've requested
-  & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
+  & RouteComponentProps<{ searchQuery: string }>; // ... plus incoming routing parameters
 
 class MusicTracks extends React.PureComponent<MusicTracksProps> {
 
-
+  previousSearchQuery: string | undefined;
   // This method is called when the component is first added to the document
   public componentDidMount() {
+    console.log("music tracks componentDidMount");
     this.ensureDataFetched();
   }
 
   // This method is called when the route parameters change
   public componentDidUpdate() {
-    this.ensureDataFetched();
+    if (this.props.searchQuery !== this.previousSearchQuery) {
+      console.log("music tracks componentDidUpdate");
+      this.ensureDataFetched();
+      this.previousSearchQuery = this.props.searchQuery;
+    }
   }
 
   private ensureDataFetched() {
-    this.props.requestMusicTracks("C:\\Users\\ADE\\Music");
+    console.log("Request music tracks. Search query : '" + this.props.searchQuery + "'");
+    this.props.requestMusicTracks(this.props.searchQuery);
   }
+
+  private renderTracks() {
+    return this.props.tracks.map((track) => (
+      <TableRow key={track.name}>
+        <TableCell></TableCell>
+        <TableCell>
+          <div className="row">
+            <div className="col-md-2">
+              <img src="https://via.placeholder.com/48" />
+            </div>
+            <div className="col-md-4 musicNameLabel">
+              {track.name}<br />
+              {track.artist}
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>Album</TableCell>
+        <TableCell>{track.artist}</TableCell>
+        <TableCell>{track.notation}</TableCell>
+        <TableCell></TableCell>
+      </TableRow>));
+  }
+  private renderSkeletonTable() {
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
+      <TableRow key={value}>
+        <TableCell></TableCell>
+        <TableCell>
+          <div className="row">
+            <div className="col-md-2">
+              <Skeleton variant="rect" width={48} height={48} />
+            </div>
+            <div className="col-md-4 musicNameLabel">
+              <Skeleton />
+              <Skeleton width="60%" />
+            </div>
+          </div>
+        </TableCell>
+        <TableCell><Skeleton width="70%" /></TableCell>
+        <TableCell><Skeleton width="30%" /></TableCell>
+        <TableCell><Skeleton width="30%" /></TableCell>
+        <TableCell></TableCell>
+      </TableRow>));
+  }
+
   render() {
     return (
       <div>
         <h2>Tracks</h2>
         <TableContainer component={Paper} className='table tracks-list table-hover' aria-labelledby="tabelLabel">
           <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell><ImClock size={16} /></TableCell>
-              <TableCell>Notation</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <div className="row">
-                  <div className="col-md-2">
-                    <img src="https://material-ui.com/static/images/cards/live-from-space.jpg" width="48px" height="48px" />
-                  </div>
-                  <div className="col-md-4 musicNameLabel">Musique<br />Artiste
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>3:30</TableCell>
-              <TableCell>2.5/5</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <div className="row">
-                  <div className="col-md-2">
-                    <img src="https://via.placeholder.com/48" />
-                  </div>
-                  <div className="col-md-4 musicNameLabel">Musique<br />Artiste
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>3:30</TableCell>
-              <TableCell>2.5/5</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <div className="row">
-                  <div className="col-md-2">
-                    <img src="https://via.placeholder.com/48" />
-                  </div>
-                  <div className="col-md-4 musicNameLabel">Musique<br />Artiste
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>3:30</TableCell>
-              <TableCell>2.5/5</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <div className="row">
-                  <div className="col-md-2">
-                    <img src="https://via.placeholder.com/48" />
-                  </div>
-                  <div className="col-md-4 musicNameLabel">Musique<br />Artiste
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>3:30</TableCell>
-              <TableCell>2.5/5</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <div className="row">
-                  <div className="col-md-2">
-                    <img src="https://via.placeholder.com/48" />
-                  </div>
-                  <div className="col-md-4 musicNameLabel">Musique<br />Artiste
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>Album</TableCell>
-              <TableCell>3:30</TableCell>
-              <TableCell>2.5/5</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-          </TableBody>
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Album</TableCell>
+                <TableCell><ImClock size={16} /></TableCell>
+                <TableCell>Notation</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.isLoading || this.props.tracks === undefined ? this.renderSkeletonTable() : this.renderTracks()}
+            </TableBody>
           </Table>
         </TableContainer>
+        {this.props.isLoading ? "Loading..." : this.renderPagination()}
       </div>);
   }
 
   private renderPagination() {
     return (
-        <div className="d-flex justify-content-between">
-          {this.props.isLoading && <span>Loading...</span>}
-        </div>
+      <Pagination count={10} variant="outlined" color="primary" />
     );
   }
 }
@@ -149,13 +115,3 @@ export default connect(
   (state: ApplicationState) => state.musicTracks, // Selects which state properties are merged into the component's props
   MusicTracksStore.actionCreators // Selects which action creators are merged into the component's props
 )(MusicTracks as any);
-
-//{/ / this.props.tracks.map((track: MusicTracksStore.MusicTrack) =>
-//  <tr key={track.name}>
-//    <td><img src="https://via.placeholder.com/32" /> {track.name}</td>
-//    <td>{track.album}</td>
-//    <td>{track.artist}</td>
-//    <td>{track.duration}</td>
-//    <td>{track.notation}</td>
-//  </tr>
-//)}

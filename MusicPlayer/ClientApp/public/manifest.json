@@ -1,15 +1,24 @@
 {
   "short_name": "MusicPlayer",
   "name": "MusicPlayer",
+  "description": "React music player",
+  "author": "Rakinta",
+  "version": "0.0.2",
+  "start_url":  "./index.html",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "placeholder512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#eeeeee"
 }

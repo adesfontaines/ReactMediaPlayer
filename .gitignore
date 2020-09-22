@@ -4,3 +4,7 @@ MusicPlayer.Data/bin
 MusicPlayer.Data/obj
 MusicPlayer.Core/obj
 MusicPlayer.Core/bin/Debug/netcoreapp3.1
+MusicPlayer.Core/bin
+MusicPlayer.MediaWorker/bin
+MusicPlayer.MediaWorker/obj
+obj

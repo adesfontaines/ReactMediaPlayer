@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { NavItem, NavLink, Container } from 'reactstrap';
 import { ApplicationState } from '../store';
 import * as MusicPlayerStore from '../store/MusicPlayer';
-import MusicPlayerDriver from './MusicPlayerDriver';
 import MusicTracks from './Lists/MusicTracks';
-import Home from './Home';
+import MusicAlbums from './Lists/MusicAlbums';
 
 type MusicPlayerProps =
   MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
@@ -17,15 +16,18 @@ type MusicPlayerProps =
 function MusicPlayerTabs() {
   return (
     <ul className="nav justify-content-center">
-        <NavItem>
-          <NavLink tag={Link} className="nav-link active" to="/songs">Songs</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink tag={Link} className="nav-link active" to="/albums">Albums</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink tag={Link} className="nav-link active" to="/artists">Artists</NavLink>
-        </NavItem>
+      <NavItem>
+        <NavLink tag={Link} className="nav-link active" to="/playlists">Playlists</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink tag={Link} className="nav-link active" to="/tracks">Tracks</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink tag={Link} className="nav-link active" to="/albums">Albums</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink tag={Link} className="nav-link active" to="/artists">Artists</NavLink>
+      </NavItem>
     </ul>)
 }
 class MusicPlayer extends React.PureComponent<MusicPlayerProps> {
@@ -33,13 +35,11 @@ class MusicPlayer extends React.PureComponent<MusicPlayerProps> {
     return (
       <React.Fragment>
         <MusicPlayerTabs />
-        <MusicPlayerDriver />
         <Container>
-          <Route exact path='/' component={MusicPlayer} />
-          <Route path='music/albums' component={MusicPlayer} />
-          <Route path='music/artists' component={Home} />
+          <Route path='/music' component={MusicTracks} />
+          <Route path='/tracks' component={MusicTracks} />
+          <Route path='/albums' component={MusicAlbums} />
         </Container>
-        <MusicTracks />
       </React.Fragment>
     );
   }

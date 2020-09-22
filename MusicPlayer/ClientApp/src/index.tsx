@@ -1,4 +1,4 @@
-import 'bootswatch/dist/lux/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -16,11 +16,11 @@ const history = createBrowserHistory({ basename: baseUrl });
 const store = configureStore(history);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App />
-        </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root'));
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root'));
 
 registerServiceWorker();

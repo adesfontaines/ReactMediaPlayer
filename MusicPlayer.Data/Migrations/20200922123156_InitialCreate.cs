@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MusicPlayer.Data.Migrations
 {
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,10 @@ namespace MusicPlayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false)
+                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    Artists = table.Column<string>(nullable: true),
+                    Year = table.Column<int>(nullable: false),
+                    CoverSource = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -36,28 +39,40 @@ namespace MusicPlayer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Album = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    AlbumId = table.Column<Guid>(nullable: false),
                     Artist = table.Column<string>(nullable: true),
-                    Duration = table.Column<int>(nullable: false),
-                    Notation = table.Column<int>(nullable: false)
+                    Duration = table.Column<TimeSpan>(nullable: false),
+                    Notation = table.Column<int>(nullable: false),
+                    SampleRate = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tracks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tracks_Albums_AlbumId",
+                        column: x => x.AlbumId,
+                        principalTable: "Albums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tracks_AlbumId",
+                table: "Tracks",
+                column: "AlbumId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Albums");
-
-            migrationBuilder.DropTable(
                 name: "Artists");
 
             migrationBuilder.DropTable(
                 name: "Tracks");
+
+            migrationBuilder.DropTable(
+                name: "Albums");
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MusicPlayer.MediaWorker": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\ADE\\Downloads\\Ben Prunty Music - FTL\""
+    }
+  }
+}

@@ -9,8 +9,8 @@ using MusicPlayer.Data;
 namespace MusicPlayer.Data.Migrations
 {
     [DbContext(typeof(MusicPlayerDbContext))]
-    [Migration("20200914125753_initialCreate")]
-    partial class initialCreate
+    [Migration("20200922123156_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,10 +24,19 @@ namespace MusicPlayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Artists")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoverSource")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -55,26 +64,40 @@ namespace MusicPlayer.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Album")
+                    b.Property<Guid>("AlbumId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Artist")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Notation")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SampleRate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
                     b.HasKey("Id");
 
+                    b.HasIndex("AlbumId");
+
                     b.ToTable("Tracks");
+                });
+
+            modelBuilder.Entity("MusicPlayer.MusicTrack", b =>
+                {
+                    b.HasOne("MusicPlayer.Core.MusicAlbum", "Album")
+                        .WithMany()
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MusicPlayer.Core;
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MusicPlayer
 {
@@ -7,12 +10,15 @@ namespace MusicPlayer
     [Key]
     public string Id { get; set; }
     [Required, StringLength(128)]
-    public string Name { get; set; }
-    public string Album { get; set; }
+    public string Title { get; set; }
+    [Required]
+    public MusicAlbum Album { get; set; }
+    [DefaultValue("Unknown")]
     public string Artist { get; set; }
     [Required]
-    public int Duration { get; set; }
-    public string DurationCaption => string.Format("{0}:{1:00}", Duration / 60, Duration % 60);
+    public TimeSpan Duration { get; set; }
     public int Notation { get; set; }
+
+    public int SampleRate { get; set; }
   }
 }
