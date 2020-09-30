@@ -1,75 +1,65 @@
-﻿import * as React from 'react';
-import ReactHowler from 'react-howler';
+﻿import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as MusicPlayerStore from '../store/MusicPlayer';
+import ReactPlayer from 'react-player/lazy'
 
 type MusicPlayerProps =
   MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
   & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
   & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
 
-class MusicPlayerEngine extends React.PureComponent<MusicPlayerProps> {
-  public player: ReactHowler | undefined;
-  constructor(props: any) {
-    super(props);
+function MusicPlayerEngine(props: MusicPlayerProps) {
+  const handleOnPause = () => { props.pause(); }
+  const handleOnPlay = () => { props.play(); }
 
-    this.handleOnLoad = this.handleOnLoad.bind(this);
-    this.handleOnEnd = this.handleOnEnd.bind(this);
-    this.handleOnPlay = this.handleOnPlay.bind(this);
-    this.step = this.step.bind(this);
-  } 
 
-  render() {
-    return (
-      <ReactHowler
-        ref={(player: any) => {
-            this.player = player
-        }}
-        src={this.props.tracksQueue.length > 0 ? this.props.tracksQueue[this.props.tracksQueuePosition] : ""}
-        playing={this.props.isPlaying}
-        loop={this.props.isRepeat}
-        volume={this.props.volume}
-        html5={false}
-        onLoad={this.handleOnLoad}
-        onEnd={this.handleOnEnd}
-        onPlay={this.handleOnPlay}
-    />);
-  }
-  step() {
-    // If the sound is still playing, continue stepping.
-    if (this.player !== undefined && this.props.isPlaying) {
-      this.props.updateTimeProgression(this.player.seek());
-      requestAnimationFrame(this.step);
+  const handleOnProgress = (state: { played: number; playedSeconds: number; loaded: number; loadedSeconds: number; }) => {
+    if (!props.isSeeking) {
+      props.updateTimeProgression(state.played);
     }
   }
 
-  componentDidUpdate(prevProps: MusicPlayerProps) {
-    if (this.player !== undefined && prevProps.requestTime !== this.props.requestTime) {
-      this.player.seek(this.props.requestTime);
-    }
+  const handleDuration = (duration: number) => {
+    props.setDuration(duration);
   }
 
-  public handleOnPlay() {
-    this.step();
+  const handleOnReady = (player: ReactPlayer) => {
+    console.log("Loaded: track duration : ", player.getDuration());
   }
 
-  public handleOnLoad() {
-    if (this.player !== undefined) {
-      console.log(this.player);
-      console.log("Loaded: track duration : ", this.player.duration());
-      this.props.afterload(this.player.duration());
-    }
-  }
-  public handleOnEnd() {
-    console.log("finished track, position: ", this.props.tracksQueuePosition, " tracks length: ", this.props.tracksQueue.length);
-    if (this.props.tracksQueuePosition < this.props.tracksQueue.length - 1) {
-      this.props.next();
+  const handleOnEnded = () => {
+    console.log("finished track, position: ", props.tracksQueuePosition, " tracks length: ", props.tracksQueue.length);
+    if (props.tracksQueuePosition < props.tracksQueue.length - 1) {
+      props.next();
     }
     else
-      this.props.pause();
+      props.pause();
   }
+
+  return (
+    <ReactPlayer
+      // url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
+      url={props.tracksQueue.length > 0 ? props.tracksQueue[props.tracksQueuePosition] : ""}
+      ref={r => props.setPlayer(r)}
+      playing={props.isPlaying}
+      loop={props.isRepeat}
+      volume={props.volume}
+      onDuration={handleDuration}
+      onProgress={handleOnProgress}
+      onReady={handleOnReady}
+      onPause={handleOnPause}
+      onPlay={handleOnPlay}
+      onEnded={handleOnEnded}
+      width={90}
+      height={90}
+      config={{
+        youtube: {
+          playerVars: { showinfo: 0, disablekb: 1, modestbranding: 1, controls: 0 }
+        }
+      }}
+    />);
 }
 export default connect(
   (state: ApplicationState) => state.musicPlayer,

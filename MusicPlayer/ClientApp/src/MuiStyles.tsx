@@ -5,13 +5,20 @@
   fade
 } from "@material-ui/core/styles";
 
-const drawerWidth = 240;
-const footerPlayerHeight = 80;
+const drawerWidth = 230;
+const footerPlayerHeight = 140;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex"
+      position: "absolute",
+      display: "flex",
+      flexDirection: "column",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      overflowY: "hidden"
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -22,9 +29,14 @@ export default makeStyles((theme: Theme) =>
     footer:
     {
       height: footerPlayerHeight + "px",
+      zIndex: theme.zIndex.drawer + 2000,
+    },
+    footerControls: {
+      padding: 3,
     },
     appBar: {
-      zIndex: theme.zIndex.drawer + 1
+      zIndex: theme.zIndex.drawer + 1,
+      position: "relative",
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -34,6 +46,12 @@ export default makeStyles((theme: Theme) =>
     },
     grow: {
       flexGrow: 1
+    },
+    mediaDurationButton: {
+      border: "none",
+      padding: 0,
+      background: "none",
+      outline: 0,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,

@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import './custom.css'
-import MusicPlayer from './components/MusicPlayer';
+import MusicPlayer from './components/MediaPlayerApplication';
 
 export default () => (
   <Layout>

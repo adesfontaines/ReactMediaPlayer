@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using MusicPlayer.Controllers;
 using MusicPlayer.Core;
 using MusicPlayer.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,17 +15,32 @@ namespace MusicPlayer.ClientApp.src.components.Album
   [Route("api/[controller]")]
   public class MusicAlbumsController : Controller
   {
-    private readonly MusicPlayerDbContext _context;
 
-    public MusicAlbumsController(MusicPlayerDbContext context)
+    public IEnumerable<MusicAlbum> Albums { get; set; }
+    private readonly MusicPlayerDbContext _context;
+    private readonly IMusicAlbumData albumData;
+    ILogger<MusicTracksController> logger;
+    public IEnumerable<MusicAlbum> Tracks { get; set; }
+
+    public MusicAlbumsController(ILogger<MusicTracksController> logger, IMusicAlbumData albumData)
     {
-      _context = context;
+      this.logger = logger;
+      this.albumData = albumData;
     }
 
-    // GET: MusicAlbums
-    public async Task<IActionResult> Index()
+    [HttpGet]
+    [Route("{searchQuery?}")]
+    public async Task<IEnumerable<MusicAlbum>> Get(string searchQuery = null)
     {
-      return View(await _context.Albums.ToListAsync());
+      try
+      {
+        return await albumData.GetAlbumsByNameAsync(searchQuery);
+      }
+      catch(Exception e)
+      {
+        logger.LogCritical(e, "Cannot retrieve albums");
+        throw;
+      }
     }
 
     // GET: MusicAlbums/Details/5

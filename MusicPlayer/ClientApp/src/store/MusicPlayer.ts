@@ -1,16 +1,17 @@
 ﻿import { Action, Reducer } from 'redux';
-import MusicPlayerEngine from '../components/MusicPlayerEngine';
+import ReactPlayer from 'react-player/lazy'
 import { MusicPlayerActionType } from './ActionTypes/MusicPlayerActionType'
 
 export interface MusicPlayerState {
   isPlaying: boolean;
   isRepeat: boolean;
+  isSeeking: boolean;
   volume: number;
-  timePosition: number | Array<number>;
-  requestTime: number;
+  timePosition: number;
   tracksQueue: string[];
   tracksQueuePosition: number;
   trackDuration: number,
+  playerInstance: ReactPlayer | null,
 }
 
 // -----------------
@@ -25,14 +26,15 @@ interface MusicNextAction { type: MusicPlayerActionType.MEDIA_NEXT }
 interface MusicBackAction { type: MusicPlayerActionType.MEDIA_BACK }
 
 interface MusicAddTrack { type: MusicPlayerActionType.MEDIA_ADD_TRACK }
+interface MediaSetPlayer { type: MusicPlayerActionType.SET_PLAYER, player: ReactPlayer | null }
 
 interface MusicVolumeChanged {
   type: MusicPlayerActionType.VOLUME_CHANGE;
   volume: number;
 }
 
-interface MusicTimeChangeRequest {
-  type: MusicPlayerActionType.MEDIA_TIME_CHANGE;
+interface MediaSeekChange {
+  type: MusicPlayerActionType.MEDIA_SEEK_CHANGE;
   newTime: number;
 }
 interface MusicTimeProgressionUpdate {
@@ -40,12 +42,12 @@ interface MusicTimeProgressionUpdate {
   position: number;
 }
 
-interface MusicEventLoaded { type: MusicPlayerActionType.HANDLE_TRACK_LOADED, trackDuration: number }
+interface MediaHandleDuration { type: MusicPlayerActionType.MEDIA_SET_DURATION, trackDuration: number }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 type KnownAction = MusicPlayAction | MusicPauseAction | MusicBackAction | MusicNextAction | MusicAddTrack |
-  MusicTimeChangeRequest | MusicTimeProgressionUpdate | MusicToggleRepeat | MusicEventLoaded | MusicVolumeChanged;
+  MediaSeekChange | MusicTimeProgressionUpdate | MusicToggleRepeat | MediaHandleDuration | MusicVolumeChanged | MediaSetPlayer;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -60,23 +62,26 @@ export const actionCreators = {
 
   togglerepeat: () => ({ type: MusicPlayerActionType.MEDIA_TOGGLE_REPEAT } as MusicToggleRepeat),
   bindposition: () => ({ type: MusicPlayerActionType.MEDIA_TOGGLE_REPEAT } as MusicToggleRepeat),
-  afterload: (duration: number) => ({ type: MusicPlayerActionType.HANDLE_TRACK_LOADED, trackDuration: duration } as MusicEventLoaded),
-  requestUpdateTime: (newPosition: number) => ({ type: MusicPlayerActionType.MEDIA_TIME_CHANGE, newTime: newPosition } as MusicTimeChangeRequest),
+  setDuration: (duration: number) => ({ type: MusicPlayerActionType.MEDIA_SET_DURATION, trackDuration: duration } as MediaHandleDuration),
+  requestUpdateTime: (newPosition: number) => ({ type: MusicPlayerActionType.MEDIA_SEEK_CHANGE, newTime: newPosition } as MediaSeekChange),
   updateTimeProgression: (newPosition: number) => ({ type: MusicPlayerActionType.UPDATE_TIME_PROGRESSION, position: newPosition } as MusicTimeProgressionUpdate),
-  volumeChanged: (newVolume: number) => ({ type: MusicPlayerActionType.VOLUME_CHANGE, volume: newVolume } as MusicVolumeChanged)
+  volumeChanged: (newVolume: number) => ({ type: MusicPlayerActionType.VOLUME_CHANGE, volume: newVolume } as MusicVolumeChanged),
+
+  setPlayer: (player: ReactPlayer | null) => ({ type: MusicPlayerActionType.SET_PLAYER, player: player } as MediaSetPlayer)
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 const unloadedState: MusicPlayerState = {
   isPlaying: false,
-  requestTime: 0,
   volume: 0.5,
   isRepeat: false,
+  isSeeking: false,
   trackDuration: 0,
   tracksQueue: ["https://goldfirestudios.com/proj/howlerjs/sound.ogg", "https://upload.wikimedia.org/wikipedia/commons/c/c0/Fingerstyle_Bass_line_over_an_Am_chord_progression.ogg"],
   tracksQueuePosition: 0,
   timePosition: 0,
+  playerInstance: null,
 };
 
 export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | undefined, incomingAction: Action): MusicPlayerState => {
@@ -86,6 +91,9 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
 
   const action = incomingAction as KnownAction;
   switch (action.type) {
+    case MusicPlayerActionType.SET_PLAYER:
+      return { ...state, playerInstance: action.player };
+
     case MusicPlayerActionType.MEDIA_PLAY:
       return { ...state, isPlaying: true };
 
@@ -106,8 +114,8 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
       }
       return state;
 
-    case MusicPlayerActionType.MEDIA_TIME_CHANGE:
-      return { ...state, requestTime: action.newTime, timePosition: action.newTime };
+    case MusicPlayerActionType.MEDIA_SEEK_CHANGE:
+      return { ...state, isSeeking: false };
 
     case MusicPlayerActionType.MEDIA_TOGGLE_REPEAT:
       return { ...state, isRepeat: !state.isRepeat };
@@ -118,7 +126,8 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
     case MusicPlayerActionType.VOLUME_CHANGE:
       return { ...state, volume: action.volume };
 
-    case MusicPlayerActionType.HANDLE_TRACK_LOADED:
+    case MusicPlayerActionType.MEDIA_SET_DURATION:
+      console.log("duration: " + action.trackDuration);
       return { ...state, trackDuration: action.trackDuration }
     default:
       return state;

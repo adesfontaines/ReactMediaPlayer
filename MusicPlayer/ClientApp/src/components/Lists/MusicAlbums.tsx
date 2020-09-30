@@ -1,16 +1,14 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../../store';
-import * as MusicTracksStore from '../../store/MusicTracks';
+import * as MusicAlbumStore from '../../store/MusicAlbums';
 import { Grid, Card, Typography, CardMedia, CardContent, CardActionArea, Link } from '@material-ui/core/';
 
-type MusicTracksProps =
-  MusicTracksStore.MusicTracksState // ... state we've requested from the Redux store
-  & typeof MusicTracksStore.actionCreators // ... plus action creators we've requested
-  & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
+type MusicAlbumProps =
+  MusicAlbumStore.MusicAlbumsState // ... state we've requested from the Redux store
+  & typeof MusicAlbumStore.actionCreators // ... plus action creators we've requested
 
-class MusicAlbums extends React.PureComponent<MusicTracksProps> {
+class MusicAlbums extends React.PureComponent<MusicAlbumProps> {
 
   // This method is called when the component is first added to the document
   public componentDidMount() {
@@ -23,7 +21,7 @@ class MusicAlbums extends React.PureComponent<MusicTracksProps> {
   }
 
   private ensureDataFetched() {
-    this.props.requestMusicTracks("C:\\Users\\ADE\\Music");
+    this.props.requestMusicAlbums(""); // No filter for fist call
   }
   render() {
     return (
@@ -68,6 +66,6 @@ class MusicAlbums extends React.PureComponent<MusicTracksProps> {
 }
 
 export default connect(
-  (state: ApplicationState) => state.musicTracks,
-  MusicTracksStore.actionCreators
+  (state: ApplicationState) => state.musicAlbums,
+  MusicAlbumStore.actionCreators
 )(MusicAlbums as any);

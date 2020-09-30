@@ -12,7 +12,8 @@ namespace MusicPlayer
     [Required, StringLength(128)]
     public string Title { get; set; }
     [Required]
-    public MusicAlbum Album { get; set; }
+    [DefaultValue("Unknown")]
+    public string Album { get; set; }
     [DefaultValue("Unknown")]
     public string Artist { get; set; }
     [Required]

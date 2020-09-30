@@ -24,7 +24,7 @@ namespace MusicPlayer
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddDbContextPool<Data.MusicPlayerDbContext>(options =>
+      services.AddDbContextPool<MusicPlayerDbContext>(options =>
       {
         options.UseSqlite(Configuration.GetConnectionString("MusicPlayerDb"));
       });
@@ -37,6 +37,7 @@ namespace MusicPlayer
       });
 
       services.AddScoped<IMusicTrackData, MusicTrackData>();
+      services.AddScoped<IMusicAlbumData, MusicAlbumData>();
 
       services.AddProgressiveWebApp(new PwaOptions
       {
@@ -44,7 +45,6 @@ namespace MusicPlayer
         RegisterWebmanifest = false,
         OfflineRoute = "offline"
       });
-
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

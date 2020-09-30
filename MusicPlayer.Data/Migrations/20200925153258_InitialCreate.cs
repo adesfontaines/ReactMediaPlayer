@@ -40,7 +40,7 @@ namespace MusicPlayer.Data.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Title = table.Column<string>(maxLength: 128, nullable: false),
-                    AlbumId = table.Column<Guid>(nullable: false),
+                    Album = table.Column<string>(nullable: false),
                     Artist = table.Column<string>(nullable: true),
                     Duration = table.Column<TimeSpan>(nullable: false),
                     Notation = table.Column<int>(nullable: false),
@@ -49,30 +49,19 @@ namespace MusicPlayer.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tracks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tracks_Albums_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tracks_AlbumId",
-                table: "Tracks",
-                column: "AlbumId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Albums");
+
+            migrationBuilder.DropTable(
                 name: "Artists");
 
             migrationBuilder.DropTable(
                 name: "Tracks");
-
-            migrationBuilder.DropTable(
-                name: "Albums");
         }
     }
 }

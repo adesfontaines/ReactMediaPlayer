@@ -15,10 +15,10 @@ namespace MusicPlayer.Data
       this.db = db;
     }
 
-    public MusicTrack Add(MusicTrack newRestaurant)
+    public MusicTrack Add(MusicTrack newTrack)
     {
-      db.Add(newRestaurant);
-      return newRestaurant;
+      db.Add(newTrack);
+      return newTrack;
     }
 
     public int Commit()

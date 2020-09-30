@@ -8,12 +8,8 @@ a {
   color: #0366d6;
 }
 
-.appTitle {
-  color: #ffffff;
-}
-
 code {
-  color: #E01A76;
+  color: #e01a76;
 }
 
 .btn-primary {
@@ -22,8 +18,8 @@ code {
   border-color: #1861ac;
 }
 
-
-.tracks-list td, .tracks-list th {
+.tracks-list td,
+.tracks-list th {
   vertical-align: middle;
   border: none;
   padding: 10px;
@@ -35,12 +31,51 @@ code {
   padding-bottom: 5px;
 }
 
-
 .musicNameLabel {
   align-self: center;
 }
-.albumCardMedia
-{
+.albumCardMedia {
   width: 171px;
   height: 171px;
+}
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 50px;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background-color: hsla(0, 0%, 100%, 0.4);
+  background-clip: padding-box;
+}
+
+main {
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+  flex-direction: row;
+  display: flex;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.media-infos-content {
+  margin-left: 8px;
+}
+.flat-button {
+  background-color: transparent;
+  border: none;
+}
+.flat-link {
+  color: gray;
+}
+.flat-link:hover {
+  text-decoration: none;
+  color: whitesmoke;
+}
+.no-wrap {
+  overflow: hidden;
+  white-space: nowrap;
 }

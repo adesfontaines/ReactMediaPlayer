@@ -3,11 +3,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import * as React from 'react';
 import { Container } from 'reactstrap';
 import FooterPlayer from './FooterPlayer';
-import MusicPlayerAppBar from './MusicPlayerAppBar';
+import MediaPlayerAppBar from './MediaPlayerAppBar';
 import MusicPlayerDrawer from './MusicPlayerDrawer';
 import MuiTheme from '../MuiTheme';
 import MuiStyles from '../MuiStyles';
-import MusicPlayerDriver from './MusicPlayerEngine';
 
 export default (props: { children?: React.ReactNode }) => (
 
@@ -15,11 +14,10 @@ export default (props: { children?: React.ReactNode }) => (
     <ThemeProvider theme={MuiTheme}>
       <div className={MuiStyles().root}>
         <CssBaseline />
-        <MusicPlayerDriver />
-        <MusicPlayerAppBar />
-        <MusicPlayerDrawer />
+        <MediaPlayerAppBar />
         <main className={MuiStyles().content}>
           <div className={MuiStyles().toolbar} />
+          <MusicPlayerDrawer />
           <Container>
             {props.children}
           </Container>

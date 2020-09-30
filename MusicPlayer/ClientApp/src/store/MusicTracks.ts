@@ -50,7 +50,8 @@ export const actionCreators = {
     dispatch({ type: MusicTracksActionType.REQUEST_TRACKS, searchQuery: searchQuery } as RequestTracksAction);
 
     const tracksState = getState().musicTracks;
-
+    console.log(!tracksState);
+    console.log(searchQuery, " ==? ", tracksState.searchQuery, " && ", !tracksState.isFirstRequest)
     if (!tracksState || (searchQuery === tracksState.searchQuery && !tracksState.isFirstRequest)) {
       log("Request canceled");
       return;
@@ -80,7 +81,7 @@ export const reducer: Reducer<MusicTracksState> = (state: MusicTracksState | und
       return { ...state, searchQuery: action.searchQuery, isLoading: true};
     case MusicTracksActionType.RECEIVE_TRACKS:
       return { ...state, tracks: action.tracks, isLoading: false, isFirstRequest: false };
+    default:
+      return state;
   }
-
-  return state;
 };

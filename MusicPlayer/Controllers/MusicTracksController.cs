@@ -25,21 +25,15 @@ namespace MusicPlayer.Controllers
     [Route("{searchQuery?}")]  
     public async Task<IEnumerable<MusicTrack>> Get(string searchQuery = null)
     {
-      return await trackData.GetTracksByNameAsync(searchQuery);
+      try
+      {
+        return await trackData.GetTracksByNameAsync(searchQuery);
+      }
+      catch (Exception e)
+      {
+        logger.LogCritical(e, "Cannot retrieve music tracks");
+        throw;
+      }
     }
-    //[HttpGet("{trackId")]
-    //public IEnumerable<MusicTrack> GetByTrackId(int trackId)
-    //{
-    //  var rng = new Random();
-    //  return Enumerable.Range(1, 1).Select(index => new MusicTrack
-    //    {
-    //      Name = "Track " + index,
-    //      Artist = "Unknown",
-    //      Album = "Unknown",
-    //      DurationSeconds = 93,
-    //      Notation = 0
-    //    })
-    //    .ToArray();
-    //}
   }
 }

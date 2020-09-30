@@ -1,4 +1,5 @@
 import * as MusicPlayer from './MusicPlayer';
+import * as MusicAlbums from './MusicAlbums';
 import * as MusicTracks from './MusicTracks';
 import * as Navigation from './Navigation';
 
@@ -6,6 +7,7 @@ import * as Navigation from './Navigation';
 export interface ApplicationState {
   musicPlayer: MusicPlayer.MusicPlayerState | undefined;
   musicTracks: MusicTracks.MusicTracksState | undefined;
+  musicAlbums: MusicAlbums.MusicAlbumsState | undefined;
   navigation: Navigation.NavigationState | undefined;
 }
 
@@ -15,6 +17,7 @@ export interface ApplicationState {
 export const reducers = {
   musicPlayer: MusicPlayer.reducer,
   musicTracks: MusicTracks.reducer,
+  musicAlbums: MusicAlbums.reducer,
   navigation: Navigation.reducer
 };
 

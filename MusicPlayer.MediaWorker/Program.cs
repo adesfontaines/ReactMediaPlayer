@@ -8,7 +8,7 @@ namespace MusicPlayer.MediaWorker
     {
       MediaWorker mw = new MediaWorker();
       Console.Write("Read files in: " + args[0]);
-      mw.GetTracksFromFolder(args[0]);
+      mw.ImportFromFolder(args[0]);
       Console.ReadKey();
     }
   }

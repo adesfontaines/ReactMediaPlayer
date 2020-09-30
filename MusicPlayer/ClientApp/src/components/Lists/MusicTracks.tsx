@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../../store';
 import * as MusicTracksStore from '../../store/MusicTracks';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core/';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@material-ui/core/';
 import { Skeleton } from '@material-ui/lab';
 import { Pagination } from 'reactstrap';
 
@@ -18,14 +18,12 @@ class MusicTracks extends React.PureComponent<MusicTracksProps> {
   previousSearchQuery: string | undefined;
   // This method is called when the component is first added to the document
   public componentDidMount() {
-    console.log("music tracks componentDidMount");
     this.ensureDataFetched();
   }
 
   // This method is called when the route parameters change
   public componentDidUpdate() {
     if (this.props.searchQuery !== this.previousSearchQuery) {
-      console.log("music tracks componentDidUpdate");
       this.ensureDataFetched();
       this.previousSearchQuery = this.props.searchQuery;
     }
@@ -80,28 +78,43 @@ class MusicTracks extends React.PureComponent<MusicTracksProps> {
   }
 
   render() {
-    return (
-      <div>
-        <h2>Tracks</h2>
-        <TableContainer component={Paper} className='table tracks-list table-hover' aria-labelledby="tabelLabel">
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Album</TableCell>
-                <TableCell><ImClock size={16} /></TableCell>
-                <TableCell>Notation</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.isLoading || this.props.tracks === undefined ? this.renderSkeletonTable() : this.renderTracks()}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {this.props.isLoading ? "Loading..." : this.renderPagination()}
-      </div>);
+    if (!this.props.isLoading && this.props.tracks && this.props.tracks.length < 0) {
+      return (
+        <div>
+          <Typography variant="h6" gutterBottom>
+            Nothing to listen here :'(
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
+            unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
+            dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
+          </Typography>
+        </div>);
+    }
+    else {
+      return (
+        <div>
+          <h2>Tracks</h2>
+          <TableContainer component={Paper} className='table tracks-list table-hover' aria-labelledby="tabelLabel">
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Album</TableCell>
+                  <TableCell><ImClock size={16} /></TableCell>
+                  <TableCell>Notation</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.props.isLoading || this.props.tracks === undefined ? this.renderSkeletonTable() : this.renderTracks()}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {this.props.isLoading ? "Loading..." : this.renderPagination()}
+        </div>);
+    }
   }
 
   private renderPagination() {
