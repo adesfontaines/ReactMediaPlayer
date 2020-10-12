@@ -1,17 +1,16 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, Route } from 'react-router';
 import { ApplicationState } from '../store';
 import * as MusicPlayerStore from '../store/MusicPlayer';
 import MusicTracks from './Lists/MusicTracks';
 import MusicAlbums from './Lists/MusicAlbums';
 import MusicPlayerTabs from './MusicPlayerTabs';
 import { Container } from 'reactstrap';
+import { Route } from 'react-router';
 
 type MusicPlayerProps =
   MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
   & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
-  & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
 
 function MediaPlayerApplication(props: MusicPlayerProps) {
 

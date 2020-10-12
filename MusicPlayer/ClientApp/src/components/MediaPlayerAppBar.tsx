@@ -19,7 +19,6 @@ const sideMenuId = "primary-search-account-menu";
 function MediaPlayerAppBar(props: NavigationProps) {
 
   // Handlers //
-
   // Drawer Menu
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     //setMobileMoreAnchorEl(event.currentTarget);
@@ -121,7 +120,7 @@ function MediaPlayerAppBar(props: NavigationProps) {
             <SearchIcon />
           </div>
           <InputBase
-            placeholder="Search…"
+            placeholder="Search songs, artist, albums…"
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,

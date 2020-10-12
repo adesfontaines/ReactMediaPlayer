@@ -16,7 +16,7 @@ it('renders without crashing', () => {
     ReactDOM.render(
         <Provider store={store}>
             <MemoryRouter>
-                <App/>
+                <Appt/>
             </MemoryRouter>
         </Provider>, document.createElement('div'));
 });

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { NavItem, NavLink, Container } from 'reactstrap';
 import { ApplicationState } from '../store';
 import { connect } from 'react-redux';
-import * as MusicPlayerStore from '../store/MusicPlayer';
 
 function MusicPlayerTabs() {
   return (

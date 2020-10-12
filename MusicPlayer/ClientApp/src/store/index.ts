@@ -1,7 +1,7 @@
 import * as MusicPlayer from './MusicPlayer';
-import * as MusicAlbums from './MusicAlbums';
 import * as MusicTracks from './MusicTracks';
-import * as Navigation from './Navigation';
+import * as MusicAlbums from './MusicAlbums';
+import * as Navigation  from './Navigation';
 
 // The top-level state object
 export interface ApplicationState {

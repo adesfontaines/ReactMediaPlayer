@@ -17,7 +17,7 @@ namespace MusicPlayer
     [DefaultValue("Unknown")]
     public string Artist { get; set; }
     [Required]
-    public TimeSpan Duration { get; set; }
+    public int Duration { get; set; }
     public int Notation { get; set; }
 
     public int SampleRate { get; set; }

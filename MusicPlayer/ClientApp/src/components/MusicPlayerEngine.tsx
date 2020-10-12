@@ -1,6 +1,5 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as MusicPlayerStore from '../store/MusicPlayer';
 import ReactPlayer from 'react-player/lazy'
@@ -8,23 +7,18 @@ import ReactPlayer from 'react-player/lazy'
 type MusicPlayerProps =
   MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
   & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
-  & RouteComponentProps<{ folderPath: string }>; // ... plus incoming routing parameters
 
 function MusicPlayerEngine(props: MusicPlayerProps) {
-  const handleOnPause = () => { props.pause(); }
-  const handleOnPlay = () => { props.play(); }
-
 
   const handleOnProgress = (state: { played: number; playedSeconds: number; loaded: number; loadedSeconds: number; }) => {
-    if (!props.isSeeking) {
-      props.updateTimeProgression(state.played);
+    if (!props.isSeeking && props.isPlaying) {
+      props.updateTimeProgress(state.played, state.playedSeconds);
     }
   }
 
   const handleDuration = (duration: number) => {
     props.setDuration(duration);
   }
-
   const handleOnReady = (player: ReactPlayer) => {
     console.log("Loaded: track duration : ", player.getDuration());
   }
@@ -41,19 +35,18 @@ function MusicPlayerEngine(props: MusicPlayerProps) {
   return (
     <ReactPlayer
       // url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
-      url={props.tracksQueue.length > 0 ? props.tracksQueue[props.tracksQueuePosition] : ""}
+      url='https://localhost:5001/api/musictracks/Stream/1'
+      //url={props.tracksQueue.length > 0 ? props.tracksQueue[props.tracksQueuePosition] : ""}
       ref={r => props.setPlayer(r)}
-      playing={props.isPlaying}
+      playing={props.isPlaying && props.tracksQueue.length > 0}
       loop={props.isRepeat}
       volume={props.volume}
       onDuration={handleDuration}
       onProgress={handleOnProgress}
       onReady={handleOnReady}
-      onPause={handleOnPause}
-      onPlay={handleOnPlay}
       onEnded={handleOnEnded}
-      width={90}
-      height={90}
+      width={80}
+      height={80}
       config={{
         youtube: {
           playerVars: { showinfo: 0, disablekb: 1, modestbranding: 1, controls: 0 }

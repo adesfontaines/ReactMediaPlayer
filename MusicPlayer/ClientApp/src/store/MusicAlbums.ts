@@ -1,23 +1,22 @@
 ﻿import { Action, Reducer } from "redux";
 import { log } from "util";
 import { AppThunkAction } from ".";
-import { MusicAlbumsActionType } from "./ActionTypes/MusicAlbumsActionType";
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 export interface MusicAlbumsState {
-  isLoading: boolean;
-  isFirstRequest: boolean;
-  searchQuery?: string;
-  previousSearchQuery?: string;
-  Albums: MusicAlbum[];
+    isLoading: boolean;
+    isFirstRequest: boolean;
+    searchQuery?: string;
+    previousSearchQuery?: string;
+    albums: MusicAlbum[];
 }
 
 export interface MusicAlbum {
-  title: string;
-  artists: string;
-  year: number;
-  coverSource: string;
+    title: string;
+    artists: string;
+    year: number;
+    coverSource: string;
 }
 
 // -----------------
@@ -25,13 +24,13 @@ export interface MusicAlbum {
 // They do not themselves have any side-effects; they just describe something that is going to happen.
 
 interface RequestAlbumsAction {
-  type: MusicAlbumsActionType.REQUEST_ALBUMS;
-  searchQuery?: string;
+    type: "REQUEST_ALBUMS";
+    searchQuery?: string;
 }
 
 interface ReceiveAlbumsAction {
-  type: MusicAlbumsActionType.RECEIVE_ALBUMS;
-  Albums: MusicAlbum[];
+    type: "RECEIVE_ALBUMS";
+    Albums: MusicAlbum[];
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
@@ -44,42 +43,43 @@ type KnownAction = RequestAlbumsAction | ReceiveAlbumsAction;
 
 export const actionCreators = {
 
-  requestMusicAlbums: (searchQuery: string | undefined): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+    requestMusicAlbums: (searchQuery: string | undefined): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
-    dispatch({ type: MusicAlbumsActionType.REQUEST_ALBUMS, searchQuery: searchQuery } as RequestAlbumsAction);
+        dispatch({ type: "REQUEST_ALBUMS", searchQuery: searchQuery } as RequestAlbumsAction);
 
-    const AlbumsState = getState().musicAlbums;
+        const AlbumsState = getState().musicAlbums;
 
-    if (!AlbumsState || (searchQuery === AlbumsState.searchQuery && !AlbumsState.isFirstRequest)) {
-      log("Request canceled");
-      return;
+        if (!AlbumsState || (searchQuery === AlbumsState.searchQuery && !AlbumsState.isFirstRequest)) {
+            log("Request canceled");
+            return;
+        }
+
+        const url = `api/musicalbums/`;
+        const response = await fetch(url);
+        const Albums = await response.json();
+
+        dispatch({ type: "RECEIVE_ALBUMS", Albums: Albums } as ReceiveAlbumsAction);
     }
-
-    const url = `api/musicalbums/`;
-    const response = await fetch(url);
-    const Albums = await response.json();
-
-    dispatch({ type: MusicAlbumsActionType.RECEIVE_ALBUMS, Albums: Albums } as ReceiveAlbumsAction);
-  }
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: MusicAlbumsState = { Albums: [], isLoading: false, isFirstRequest: true, searchQuery: undefined, previousSearchQuery: undefined };
+const unloadedState: MusicAlbumsState = { albums: [], isLoading: false, isFirstRequest: true, searchQuery: undefined, previousSearchQuery: undefined };
 
 export const reducer: Reducer<MusicAlbumsState> = (state: MusicAlbumsState | undefined, incomingAction: Action): MusicAlbumsState => {
-  if (state === undefined) {
-    return unloadedState;
-  }
+    if (state === undefined) {
+        return unloadedState;
+    }
 
-  const action = incomingAction as KnownAction;
-  switch (action.type) {
-    case MusicAlbumsActionType.REQUEST_ALBUMS:
-      return { ...state, searchQuery: action.searchQuery, isLoading: true};
-    case MusicAlbumsActionType.RECEIVE_ALBUMS:
-      return { ...state, Albums: action.Albums, isLoading: false, isFirstRequest: false };
-  }
+    const action = incomingAction as KnownAction;
+    switch (action.type) {
+        case "REQUEST_ALBUMS":
+            return { ...state, searchQuery: action.searchQuery, isLoading: true };
+        case "RECEIVE_ALBUMS":
+            return { ...state, albums: action.Albums, isLoading: false, isFirstRequest: false };
+        default:
+            return state;
+    }
 
-  return state;
 };

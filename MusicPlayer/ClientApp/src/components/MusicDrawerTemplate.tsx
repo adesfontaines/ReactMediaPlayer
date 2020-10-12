@@ -1,5 +1,5 @@
 ﻿import { List, ListItem, ListItemIcon, ListItemText, Divider } from "@material-ui/core/";
-import { SettingsRounded, LibraryMusicRounded, HomeRounded, ExploreRounded } from "@material-ui/icons/";
+import { SettingsRounded, LibraryMusicRounded, HomeRounded, ExploreRounded, AddCircleRounded } from "@material-ui/icons/";
 import React from "react";
 import MuiStyles from "../MuiStyles";
 import { connect } from "react-redux";
@@ -35,6 +35,12 @@ function MusicDrawerTemplate() {
       </List>
       <Divider />
       <List>
+        <ListItem button component={Link} to="/import">
+          <ListItemIcon>
+            <AddCircleRounded />
+          </ListItemIcon>
+          <ListItemText primary={"Import media"} />
+        </ListItem>
         <ListItem button component={Link} to="/settings">
           <ListItemIcon>
             <SettingsRounded />

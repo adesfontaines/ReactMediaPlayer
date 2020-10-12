@@ -8,61 +8,87 @@ type MusicAlbumProps =
   MusicAlbumStore.MusicAlbumsState // ... state we've requested from the Redux store
   & typeof MusicAlbumStore.actionCreators // ... plus action creators we've requested
 
-class MusicAlbums extends React.PureComponent<MusicAlbumProps> {
+var firstSearch: boolean;
+var previousSearchQuery: string | undefined;
+function MusicAlbums(props: MusicAlbumProps) {
 
   // This method is called when the component is first added to the document
-  public componentDidMount() {
-    this.ensureDataFetched();
+  React.useEffect(() => {
+    if (!props.isLoading && (firstSearch || props.searchQuery !== previousSearchQuery)) {
+      firstSearch = false;
+      previousSearchQuery = props.searchQuery;
+      console.log("Request music albums. Search query : '" + props.searchQuery + "'");
+      props.requestMusicAlbums(props.searchQuery);
+    }
+
+    props.requestMusicAlbums(""); // No filter for fist call
+  });
+
+  const renderPagination = () => {
+    return (
+      <div className="d-flex justify-content-between">
+        {props.isLoading && <span>Loading...</span>}
+      </div>
+    );
+  }
+  const renderSkeletons = () => {
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8].map((value) => (
+      <Grid item>
+        <Card>
+          <CardActionArea>
+            <CardMedia
+              className="albumCardMedia"
+              image="https://via.placeholder.com/256"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5">
+                Name
+                                            </Typography>
+              <Link href="google.com" color="textSecondary">
+                Artist
+                                            </Link>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+    ));
+  }
+  const renderAlbums = () => {
+    return props.albums.map((album, index) => (
+      <Grid item key={index}>
+        <Card>
+          <CardActionArea>
+            <CardMedia
+              className="albumCardMedia"
+              image="https://via.placeholder.com/256"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5">album.Title</Typography>
+              <Link href="google.com" color="textSecondary">album.Artist</Link>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+    ));
   }
 
-  // This method is called when the route parameters change
-  public componentDidUpdate() {
-    this.ensureDataFetched();
+  if ((!props.isLoading || !props.albums || (props.albums && props.albums.length == 0))) {
+    return (<div>Nothing to see here</div>)
   }
-
-  private ensureDataFetched() {
-    this.props.requestMusicAlbums(""); // No filter for fist call
-  }
-  render() {
+  else {
     return (
       <div>
         <h2>Albums</h2>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Grid container justify="center" spacing={2}>
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => (
-                <Grid item>
-                  <Card>
-                    <CardActionArea>
-                      <CardMedia
-                        className="albumCardMedia"
-                        image="https://via.placeholder.com/256"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5">
-                          Name
-                    </Typography>
-                        <Link href="google.com" color="textSecondary">
-                          Artist
-                    </Link>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+              {props.isLoading ? renderSkeletons() : renderAlbums()}
             </Grid>
           </Grid>
         </Grid>
       </div>);
   }
 
-  private renderPagination() {
-    return (
-      <div className="d-flex justify-content-between">
-        {this.props.isLoading && <span>Loading...</span>}
-      </div>
-    );
-  }
 }
 
 export default connect(

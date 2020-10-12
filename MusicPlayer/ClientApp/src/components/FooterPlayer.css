@@ -1,24 +1,34 @@
 ﻿.media-btn {
-  color: #f7f8f9;
+    color: #f7f8f9;
 }
-.media-btn:hover {
-  color: #ffffff;
-}
+
+    .media-btn.focus .media-btn:focus {
+        box-shadow: none;
+    }
+
+    .media-btn:hover {
+        color: #ffffff;
+    }
+
 .footer-player {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-  color: grey;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    color: grey;
 }
+
 .bar {
-  transition: none;
+    transition: none;
 }
+
 .volumeSlider {
-  height: 50px;
+    height: 50px;
 }
+
 .page-footer {
-  z-index: 10;
-  position: relative;
+    z-index: 10;
+    position: relative;
 }
+
 .media-title {
-  color: whitesmoke;
-  font-weight: bold;
+    color: whitesmoke;
+    font-weight: bold;
 }

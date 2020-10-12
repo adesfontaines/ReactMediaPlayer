@@ -73,7 +73,7 @@ namespace MusicPlayer.MediaWorker
           Title = tfile.Tag.Title,
           Artist = tfile.Tag.FirstAlbumArtist,
           Album = trackAlbumTitle,
-          Duration = tfile.Properties.Duration,
+          Duration = (int)tfile.Properties.Duration.TotalSeconds,
           SampleRate = tfile.Properties.AudioSampleRate,
         };
 
