@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <UserSecretsId>33c01679-6731-418e-95bd-db17777e875e</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -53,6 +54,7 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\components\Album\" />
     <Folder Include="ClientApp\src\components\Tracks\" />
+    <Folder Include="Maintenance\" />
   </ItemGroup>
 
   <ItemGroup>

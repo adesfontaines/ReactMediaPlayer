@@ -32,3 +32,6 @@
     color: whitesmoke;
     font-weight: bold;
 }
+.media-cover {
+    border-radius: 5px;
+}

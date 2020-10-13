@@ -1,5 +1,7 @@
-﻿import { Action, Reducer } from 'redux';
-import ReactPlayer from 'react-player/lazy'
+﻿import ReactPlayer from 'react-player/lazy';
+import { Action, Reducer } from 'redux';
+import MediaUtils from '../MediaUtils';
+import { MusicTrack } from './MusicTracks';
 
 export interface MusicPlayerState {
   isPlaying: boolean;
@@ -11,7 +13,8 @@ export interface MusicPlayerState {
   timePositionSeconds: number;
   timeProgressBarValue: number;
   timeLabelMode: number;
-  tracksQueue: string[];
+  tracksQueue: MusicTrack[];
+  tracksQueueURL: string[];
   tracksQueuePosition: number;
   trackDuration: number,
   playerInstance: ReactPlayer | null,
@@ -41,8 +44,8 @@ interface MediaHandleDuration { type: "MEDIA_SET_DURATION", trackDuration: numbe
 interface MediaSetPlayer { type: "SET_PLAYER", player: ReactPlayer | null }
 interface MediaSetTimeLabelMode { type: "MEDIA_TIMELABEL_MODE", timeLabelMode: TimeLabelMode }
 
-interface MediaAddTrack { type: "MEDIA_ADD_TRACK", track: string }
-
+interface MediaAddToQueue { type: "MEDIA_PUSH_QUEUE", track: MusicTrack }
+interface MediaSetQueue { type: "MEDIA_SET_QUEUE", tracks: MusicTrack[] }
 
 interface MediaSeekChange {
   type: "MEDIA_SEEK_CHANGE";
@@ -61,9 +64,9 @@ interface MusicTimeProgressionUpdate {
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = MusicPlayAction | MusicPauseAction | MusicBackAction | MusicNextAction | MediaAddTrack | MediaToggleShuffle |
+type KnownAction = MusicPlayAction | MusicPauseAction | MusicBackAction | MusicNextAction | MediaAddToQueue | MediaToggleShuffle |
   MediaToggleSeek | MediaSeekChange | MusicTimeProgressionUpdate | MusicToggleRepeat | MediaHandleDuration | MusicVolumeChanged |
-  MediaSetPlayer | MediaUpdateProgress | MediaAddTrack | MediaSetTimeLabelMode;
+  MediaSetPlayer | MediaUpdateProgress | MediaAddToQueue | MediaSetTimeLabelMode | MediaSetQueue;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -87,7 +90,8 @@ export const actionCreators = {
 
   volumeChanged: (newVolume: number) => ({ type: "VOLUME_CHANGE", volume: newVolume } as MusicVolumeChanged),
 
-  addTrack: (track: string) => ({ type: "MEDIA_ADD_TRACK", track: track } as MediaAddTrack),
+  pushTrackToQueue: (track: MusicTrack) => ({ type: "MEDIA_PUSH_QUEUE", track: track } as MediaAddToQueue),
+  setQueue: (tracks: MusicTrack[]) => ({ type: "MEDIA_SET_QUEUE", tracks: tracks } as MediaSetQueue),
 
   setPlayer: (player: ReactPlayer | null) => ({ type: "SET_PLAYER", player: player } as MediaSetPlayer)
 };
@@ -101,7 +105,8 @@ const unloadedState: MusicPlayerState = {
   isShuffle: false,
   isSeeking: false,
   trackDuration: 0,
-  tracksQueue: ["https://goldfirestudios.com/proj/howlerjs/sound.ogg", "https://upload.wikimedia.org/wikipedia/commons/c/c0/Fingerstyle_Bass_line_over_an_Am_chord_progression.ogg"],
+  tracksQueue: [],
+  tracksQueueURL: [],
   tracksQueuePosition: 0,
   timePosition: 0,
   timePositionSeconds: 0,
@@ -119,9 +124,12 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
   switch (action.type) {
     case "SET_PLAYER":
       return { ...state, playerInstance: action.player };
-    case "MEDIA_ADD_TRACK":
+    case "MEDIA_PUSH_QUEUE":
       state.tracksQueue.push(action.track);
+      state.tracksQueueURL.push(MediaUtils.getMusicStreamURL(action.track.id));
       return state;
+    case "MEDIA_SET_QUEUE":
+      return { ...state, tracksQueue: action.tracks, tracksQueueURL: action.tracks.map(x => (MediaUtils.getMusicStreamURL(x.id))) };
     case "MEDIA_PLAY":
       return { ...state, isPlaying: true };
     case "MEDIA_PAUSE":
@@ -152,10 +160,8 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
 
     case "VOLUME_CHANGE":
       return { ...state, volume: action.volume };
-
     case "MEDIA_SET_DURATION":
       return { ...state, trackDuration: action.trackDuration }
-
     case "MEDIA_TOGGLE_SEEK":
       return { ...state, isSeeking: action.seeking }
     case "MEDIA_TIMELABEL_MODE":

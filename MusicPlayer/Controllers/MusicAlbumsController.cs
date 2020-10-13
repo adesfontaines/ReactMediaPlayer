@@ -44,7 +44,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         [HttpGet]
         [Route("details/{id}")]
         // GET: MusicAlbums/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
@@ -76,7 +76,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         {
             if (ModelState.IsValid)
             {
-                musicAlbum.Id = Guid.NewGuid();
+                musicAlbum.Id = Guid.NewGuid().ToString();
                 _context.Add(musicAlbum);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +87,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         [HttpGet]
         [Route("edit/{id}")]
         // GET: MusicAlbums/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
             {
@@ -107,7 +107,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] MusicAlbum musicAlbum)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name")] MusicAlbum musicAlbum)
         {
             if (id != musicAlbum.Id)
             {
@@ -138,7 +138,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         }
 
         // GET: MusicAlbums/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
@@ -158,7 +158,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
         // POST: MusicAlbums/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var musicAlbum = await _context.Albums.FindAsync(id);
             _context.Albums.Remove(musicAlbum);
@@ -166,7 +166,7 @@ namespace MusicPlayer.ClientApp.src.components.Album
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MusicAlbumExists(Guid id)
+        private bool MusicAlbumExists(string id)
         {
             return _context.Albums.Any(e => e.Id == id);
         }

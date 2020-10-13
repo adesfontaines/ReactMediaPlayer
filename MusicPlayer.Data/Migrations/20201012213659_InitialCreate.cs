@@ -42,9 +42,10 @@ namespace MusicPlayer.Data.Migrations
                     Title = table.Column<string>(maxLength: 128, nullable: false),
                     Album = table.Column<string>(nullable: false),
                     Artist = table.Column<string>(nullable: true),
-                    Duration = table.Column<TimeSpan>(nullable: false),
+                    Duration = table.Column<int>(nullable: false),
                     Notation = table.Column<int>(nullable: false),
-                    SampleRate = table.Column<int>(nullable: false)
+                    SampleRate = table.Column<int>(nullable: false),
+                    FilePath = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

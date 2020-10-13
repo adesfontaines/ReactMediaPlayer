@@ -9,6 +9,7 @@ import * as MusicPlayerStore from '../store/MusicPlayer';
 import './FooterPlayer.css';
 import MusicPlayerDriver from './MusicPlayerEngine';
 import formatTimeLabel from '../MediaUtils';
+import MediaUtils from '../MediaUtils';
 type MusicPlayerProps =
   MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
   & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
@@ -66,9 +67,9 @@ class FooterPlayer extends React.PureComponent<MusicPlayerProps>
     if (this.props.trackDuration !== undefined && this.props.timePositionSeconds !== undefined) {
       switch (this.props.timeLabelMode) {
         case MusicPlayerStore.TimeLabelMode.TIME_PROGRESSION:
-          return formatTimeLabel(this.props.timePositionSeconds) + " / " + formatTimeLabel(this.props.trackDuration);
+          return MediaUtils.formatTimeLabel(this.props.timePositionSeconds) + "/" + MediaUtils.formatTimeLabel(this.props.trackDuration);
         case MusicPlayerStore.TimeLabelMode.REMAINING_TIME:
-          return "-" + formatTimeLabel(this.props.trackDuration - this.props.timePositionSeconds);
+          return "-" + MediaUtils.formatTimeLabel(this.props.trackDuration - this.props.timePositionSeconds) + "/" + MediaUtils.formatTimeLabel(this.props.trackDuration);
       }
     }
     else {
@@ -76,6 +77,8 @@ class FooterPlayer extends React.PureComponent<MusicPlayerProps>
     }
   }
   public render() {
+    const haveAnyTrack = this.props.tracksQueue && this.props.tracksQueue.length > 0;
+    const currentTrack = haveAnyTrack ? this.props.tracksQueue && this.props.tracksQueue[this.props.tracksQueuePosition] : null;
     return (
       <div className="page-footer">
         <Slider aria-labelledby="timeline-slider"
@@ -85,9 +88,8 @@ class FooterPlayer extends React.PureComponent<MusicPlayerProps>
           step={0.1}
           onChange={this.handleSliderChange}
           onChangeCommitted={this.handleRequestSeekChange}
-          //ValueLabelComponent={ValueLabelComponent}
           valueLabelDisplay="auto"
-          valueLabelFormat={(x) => formatTimeLabel(Math.trunc(x))}
+          valueLabelFormat={(x) => MediaUtils.formatTimeLabel(Math.trunc(x))}
         />
         <LinearProgress style={{ background: "#858585" }} variant="determinate" value={this.props.timePosition} />
 
@@ -102,14 +104,14 @@ class FooterPlayer extends React.PureComponent<MusicPlayerProps>
                 className="media-infos-container"
                 style={{ display: "flex", flexBasis: "100%" }}
               >
-                <div style={{ minWidth: "90px", height: "90px", position: "relative" }}>
-                  <img alt="album cover" src="https://via.placeholder.com/90" style={{ position: "absolute" }} />
+                <div style={{ position: "relative" }}>
+                  <img className="media-cover" alt="media cover" src="https://via.placeholder.com/80" style={{ position: "absolute" }} />
                   <MusicPlayerDriver />
                 </div>
                 <div className="media-infos-content no-wrap">
-                  <Typography variant="h6" className="media-title">My Title Name</Typography>
-                  <Typography variant="subtitle1">
-                    <Link href="#" className="flat-link" underline="none">Album Name</Link> / <Link className="flat-link" href="#" underline="none">Artist Name</Link>
+                  <Typography className="media-title">{currentTrack?.title}</Typography>
+                  <Typography variant="subtitle2">
+                    <Link href="#" className="flat-link" underline="none">{currentTrack?.album}</Link> / <Link className="flat-link" href="#" underline="none">{currentTrack?.artist}</Link>
                   </Typography>
                   <button className="flat-button" style={{ color: "grey" }} onClick={() => this.props.setTimeLabelMode(this.props.timeLabelMode == 0 ? 1 : 0)}>
                     <Typography variant="overline">
@@ -142,9 +144,9 @@ class FooterPlayer extends React.PureComponent<MusicPlayerProps>
               >
                 <button className="btn media-btn disabled">{this.volumeIcon()}</button>
                 <Slider aria-labelledby="volume-slider" className="volumeSlider"
-                  max={1} min={0} step={0.01} value={this.props.volume} orientation="vertical"
+                  max={1} min={0} step={0.01} value={this.props.volume} orientation="horizontal"
                   onChange={this.handleVolumeChange}
-                  style={{ height: "60px" }} />
+                  style={{ width: "50px", height:buttonSize }} />
               </Box>
             </Box>
           </Box>

@@ -4,20 +4,21 @@ import { AppThunkAction } from ".";
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 export interface MusicTracksState {
-    isLoading: boolean;
-    searchQuery?: string;
-    previousSearchQuery?: string;
-    tracks: MusicTrack[];
+  isLoading: boolean;
+  searchQuery?: string;
+  previousSearchQuery?: string;
+  tracks: MusicTrack[];
 }
 
 export interface MusicTrack {
-    id: string;
-    title: string;
-    album: string;
-    artist: string;
-    duration: number;
-    notation: number;
-    samplerate: number;
+  id: string;
+  title: string;
+  album: string;
+  artist: string;
+  duration: number;
+  notation: number;
+  samplerate: number;
+  filepath: string;
 }
 
 // -----------------
@@ -25,19 +26,26 @@ export interface MusicTrack {
 // They do not themselves have any side-effect  s; they just describe something that is going to happen.
 
 interface RequestTracksAction {
-    type: "REQUEST_TRACKS";
-    searchQuery?: string;
+  type: "REQUEST_TRACKS";
+  searchQuery?: string;
 }
 
 interface ReceiveTracksSuccessAction {
-    type: "RECEIVE_TRACKS_SUCCESS";
-    searchQuery?: string;
-    tracks: MusicTrack[];
+  type: "RECEIVE_TRACKS_SUCCESS";
+  searchQuery?: string;
+  tracks: MusicTrack[];
 }
-
+interface ImportTracksFiles {
+  type: "IMPORT_TRACKS_FILES";
+  files: string[];
+}
+interface ImportTracksDirectory {
+  type: "IMPORT_TRACKS_DIRECTORY";
+  directoryPath: string;
+}
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = RequestTracksAction | ReceiveTracksSuccessAction;
+type KnownAction = RequestTracksAction | ReceiveTracksSuccessAction | ImportTracksFiles | ImportTracksDirectory;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -45,17 +53,25 @@ type KnownAction = RequestTracksAction | ReceiveTracksSuccessAction;
 
 export const actionCreators = {
 
-    requestMusicTracks: (searchQuery: string | undefined): AppThunkAction<KnownAction> => (dispatch, getState) => {
+  requestMusicTracks: (searchQuery: string | undefined): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
-        console.log("request tracks action creator");
-        dispatch({ type: "REQUEST_TRACKS", searchQuery: searchQuery } as RequestTracksAction);
+    console.log("request tracks action creator");
+    dispatch({ type: "REQUEST_TRACKS", searchQuery: searchQuery } as RequestTracksAction);
 
-        fetch('api/musictracks/')
-            .then(responses => responses.json() as Promise<MusicTrack[]>)
-            .then(data => dispatch({ type: "RECEIVE_TRACKS_SUCCESS", tracks: data, searchQuery: searchQuery } as ReceiveTracksSuccessAction))
-            .catch(error => console.log("MusicTracks fetch failed : " + error));
+    fetch('api/musictracks/')
+      .then(responses => responses.json() as Promise<MusicTrack[]>)
+      .then(data => dispatch({ type: "RECEIVE_TRACKS_SUCCESS", tracks: data, searchQuery: searchQuery } as ReceiveTracksSuccessAction))
+      .catch(error => console.log("MusicTracks fetch failed : " + error));
 
-    }
+  },
+  importTracksFiles: (files: string[]): AppThunkAction<KnownAction> => (dispatch) => {
+
+    console.log("import tracks directory...");
+    var data = new FormData();
+    data.append("files", JSON.stringify(files));
+    fetch('api/musictracks/import', { method: "POST", body: data })
+      .then(responses => console.log("importracks respnse:", responses.json()));
+  }
 };
 
 // ----------------
@@ -64,21 +80,28 @@ export const actionCreators = {
 const unloadedState: MusicTracksState = { tracks: [], isLoading: false, searchQuery: undefined, previousSearchQuery: undefined };
 
 export const reducer: Reducer<MusicTracksState> = (state: MusicTracksState | undefined, incomingAction: Action): MusicTracksState => {
-    if (state === undefined) {
-        return unloadedState;
-    }
+  if (state === undefined) {
+    return unloadedState;
+  }
 
-    const action = incomingAction as KnownAction;
-    switch (action.type) {
-        case "REQUEST_TRACKS":
-            return { ...state, searchQuery: action.searchQuery, isLoading: true };
-        case "RECEIVE_TRACKS_SUCCESS":
-            console.log("state.searchQuery: " + state.searchQuery + " action.searchQuery: " + action.searchQuery)
-            if (state.searchQuery == action.searchQuery) {
-                console.log("Receive tracks: " + action.tracks)
-                return { ...state, tracks: action.tracks, isLoading: false };
-            }
-        default:
-            return state;
+  const action = incomingAction as KnownAction;
+  switch (action.type) {
+    case "REQUEST_TRACKS":
+      return { ...state, searchQuery: action.searchQuery, isLoading: true };
+    case "RECEIVE_TRACKS_SUCCESS": {
+      console.log("state.searchQuery: " + state.searchQuery + " action.searchQuery: " + action.searchQuery)
+      if (state.searchQuery == action.searchQuery) {
+        console.log("Receive tracks: " + action.tracks)
+        return { ...state, tracks: action.tracks, isLoading: false };
+      }
+      return state;
     }
+    case "IMPORT_TRACKS_FILES":
+      console.log(action.files);
+      return state;
+    case "IMPORT_TRACKS_DIRECTORY":
+      return state;
+    default:
+      return state;
+  }
 };

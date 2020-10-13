@@ -5,7 +5,7 @@
   fade
 } from "@material-ui/core/styles";
 
-const drawerWidth = 230;
+const drawerWidth = 210;
 const footerPlayerHeight = 140;
 
 export default makeStyles((theme: Theme) =>

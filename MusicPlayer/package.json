@@ -1,0 +1,21 @@
+{
+  "name": "shibaplayer",
+  "version": "1.0.0",
+  "description": "React media player",
+  "main": "index.js",
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "bootswatch": "^4.5.2",
+    "material-ui-dropzone": "^3.5.0",
+    "react-icons": "^3.11.0",
+    "react-player": "^2.6.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antonin DESFONTAINES",
+  "license": "ISC"
+}

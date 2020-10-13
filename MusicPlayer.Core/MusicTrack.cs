@@ -1,14 +1,10 @@
-﻿using MusicPlayer.Core;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace MusicPlayer
+namespace MusicPlayer.Core
 {
-  public class MusicTrack
+  public class MusicTrack : MediaElement
   {
-    [Key]
-    public string Id { get; set; }
     [Required, StringLength(128)]
     public string Title { get; set; }
     [Required]
@@ -21,5 +17,7 @@ namespace MusicPlayer
     public int Notation { get; set; }
 
     public int SampleRate { get; set; }
+    [Required]
+    public string FilePath { get; set; }
   }
 }

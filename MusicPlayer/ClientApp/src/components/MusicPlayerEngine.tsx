@@ -24,35 +24,35 @@ function MusicPlayerEngine(props: MusicPlayerProps) {
   }
 
   const handleOnEnded = () => {
-    console.log("finished track, position: ", props.tracksQueuePosition, " tracks length: ", props.tracksQueue.length);
     if (props.tracksQueuePosition < props.tracksQueue.length - 1) {
       props.next();
     }
     else
       props.pause();
   }
+  if (props.tracksQueue.length > 0) {
+    return (
+      <ReactPlayer
+        url={props.tracksQueueURL}
+        ref={r => props.setPlayer(r)}
+        playing={props.isPlaying && props.tracksQueue.length > 0}
+        loop={props.isRepeat}
+        volume={props.volume}
+        onDuration={handleDuration}
+        onProgress={handleOnProgress}
+        onReady={handleOnReady}
+        onEnded={handleOnEnded}
+        width={80}
+        height={80}
+        config={{
+          youtube: {
+            playerVars: { showinfo: 0, disablekb: 1, modestbranding: 1, controls: 0 }
+          }
+        }}
+      />);
+  }
+  return "";
 
-  return (
-    <ReactPlayer
-      // url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
-      url='https://localhost:5001/api/musictracks/Stream/1'
-      //url={props.tracksQueue.length > 0 ? props.tracksQueue[props.tracksQueuePosition] : ""}
-      ref={r => props.setPlayer(r)}
-      playing={props.isPlaying && props.tracksQueue.length > 0}
-      loop={props.isRepeat}
-      volume={props.volume}
-      onDuration={handleDuration}
-      onProgress={handleOnProgress}
-      onReady={handleOnReady}
-      onEnded={handleOnEnded}
-      width={80}
-      height={80}
-      config={{
-        youtube: {
-          playerVars: { showinfo: 0, disablekb: 1, modestbranding: 1, controls: 0 }
-        }
-      }}
-    />);
 }
 export default connect(
   (state: ApplicationState) => state.musicPlayer,

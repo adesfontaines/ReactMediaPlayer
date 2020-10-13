@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using MusicPlayer.Data;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using MusicPlayer.MediaWorker;
+using MusicPlayer.Core;
+using System.Linq;
 
 namespace MusicPlayer.Controllers
 {
@@ -23,15 +27,29 @@ namespace MusicPlayer.Controllers
         }
         [HttpGet]
         [Route("{searchQuery?}")]
-        public async Task<IEnumerable<MusicTrack>> Get(string searchQuery = null)
+        public async Task<IEnumerable<MusicTrack>> GetByName(string searchQuery = null)
         {
             try
             {
-                return await trackData.GetTracksByNameAsync(searchQuery);
+                return await trackData.GetByNameAsync(searchQuery);
             }
             catch (Exception e)
             {
                 logger.LogCritical(e, "Cannot retrieve music tracks");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("{trackId:int}")]
+        public async Task<MusicTrack> GetById(string trackId)
+        {
+            try
+            {
+                return await trackData.GetByIdAsync(trackId);
+            }
+            catch (Exception e)
+            {
+                logger.LogCritical(e, "Cannot retrieve music track with id '", trackId, "'.");
                 throw;
             }
         }
@@ -41,10 +59,10 @@ namespace MusicPlayer.Controllers
         {
             try
             {
-                string fileLocation = "C://Users//ADE//Downloads//Ben Prunty Music - FTL//09 Colonial (Explore).mp3";
-                if (System.IO.File.Exists(fileLocation))
+                MusicTrack mt = await trackData.GetByIdAsync(trackId);
+                if (mt != null && !string.IsNullOrEmpty(mt.FilePath) && System.IO.File.Exists(mt.FilePath))
                 {
-                    Stream stream = System.IO.File.OpenRead(fileLocation);
+                    Stream stream = System.IO.File.OpenRead(mt.FilePath);
                     stream = await Task.FromResult(stream);
                     return stream;
                 }
@@ -57,6 +75,21 @@ namespace MusicPlayer.Controllers
                 logger.LogCritical(e, "Cannot retrieve music tracks");
                 throw;
             }
+        }
+        [HttpPost("import")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ImportTracks(string[] files)
+        {
+            Console.WriteLine("importing tracks currently la maintenant...");
+            string supportedExtensions = "*.wav,*.aac,*.wma,*.wmv,*.mp3";
+
+            IEnumerable<string> filePaths = Directory.EnumerateFiles(@"C:\Users\ADE\Downloads\Ben Prunty Music - FTL", "*.*", SearchOption.AllDirectories)
+      .Where(s => supportedExtensions.Contains(Path.GetExtension(s).ToLower()));
+            
+            IEnumerable<MusicTrack> tracks = await MusicWorkerService.Instance.GetTracksFromFiles(filePaths.ToArray());
+            await trackData.AddRange(tracks);
+            return Ok();
         }
     }
 }

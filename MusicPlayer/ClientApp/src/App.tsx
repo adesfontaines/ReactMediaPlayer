@@ -7,15 +7,8 @@ import MusicPlayer from './components/MediaPlayerApplication';
 import AppSettings from './components/AppSettings';
 import ImportMedia from './components/ImportMedia';
 import AppInitialize from './components/AppInitialize';
-import * as MusicPlayerStore from './store/MusicPlayer';
-import { ApplicationState } from './store';
-import { connect } from 'react-redux';
 
-type MediaPlayerProps =
-    MusicPlayerStore.MusicPlayerState // ... state we've requested from the Redux store
-    & typeof MusicPlayerStore.actionCreators // ... plus action creators we've requested
-
-function MediaPlayerApplication(props: MediaPlayerProps) {
+export default function App() {
     if (false) {
         return AppInitialize();
     }
@@ -30,7 +23,3 @@ function MediaPlayerApplication(props: MediaPlayerProps) {
         );
     }
 }
-
-export default connect(
-    (state: ApplicationState) => state.navigation,
-    MusicPlayerStore.actionCreators)(MediaPlayerApplication);

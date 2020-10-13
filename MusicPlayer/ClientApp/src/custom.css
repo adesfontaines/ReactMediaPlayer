@@ -53,7 +53,7 @@ code {
 main {
   position: relative;
   flex-grow: 1;
-  overflow: hidden;
+  overflow-x: hidden;
   flex-direction: row;
   display: flex;
   top: 0;
@@ -76,6 +76,6 @@ main {
   color: whitesmoke;
 }
 .no-wrap {
-  overflow: hidden;
+  overflow-x: hidden;
   white-space: nowrap;
 }

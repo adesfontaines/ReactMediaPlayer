@@ -57,7 +57,7 @@ namespace MusicPlayer.Data.Migrations
                     b.ToTable("Artists");
                 });
 
-            modelBuilder.Entity("MusicPlayer.MusicTrack", b =>
+            modelBuilder.Entity("MusicPlayer.Core.MusicTrack", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -69,7 +69,11 @@ namespace MusicPlayer.Data.Migrations
                     b.Property<string>("Artist")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("Duration")
+                    b.Property<int>("Duration")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Notation")
