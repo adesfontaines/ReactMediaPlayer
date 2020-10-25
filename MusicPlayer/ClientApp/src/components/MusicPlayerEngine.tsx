@@ -20,7 +20,9 @@ function MusicPlayerEngine(props: MusicPlayerProps) {
     props.setDuration(duration);
   }
   const handleOnReady = (player: ReactPlayer) => {
-    console.log("Loaded: track duration : ", player.getDuration());
+  }
+  const handleOnStart = () => {
+    var currentMedia = props.tracksQueue[props.tracksQueuePosition];
   }
 
   const handleOnEnded = () => {
@@ -41,8 +43,10 @@ function MusicPlayerEngine(props: MusicPlayerProps) {
         onDuration={handleDuration}
         onProgress={handleOnProgress}
         onReady={handleOnReady}
+        onStart={handleOnStart}
         onEnded={handleOnEnded}
         width={80}
+        progressInterval={250}
         height={80}
         config={{
           youtube: {

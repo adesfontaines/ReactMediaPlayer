@@ -4,7 +4,9 @@ using System.Text;
 
 namespace MusicPlayer.Core
 {
-  class GlobalPreferences
+  public class ServerPreferences
   {
+        bool CanImport;
+        bool CanDownload;
   }
 }

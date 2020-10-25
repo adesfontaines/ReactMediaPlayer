@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicPlayer.Data;
 
-namespace MusicPlayer.Data.Migrations
+namespace MediaPlayer.Data.Migrations
 {
     [DbContext(typeof(MusicPlayerDbContext))]
-    [Migration("20201012213659_InitialCreate")]
+    [Migration("20201017223550_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,14 +20,24 @@ namespace MusicPlayer.Data.Migrations
 
             modelBuilder.Entity("MusicPlayer.Core.MusicAlbum", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Artists")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CoverSource")
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("HasMetaData")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SortableTitle")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -45,7 +55,23 @@ namespace MusicPlayer.Data.Migrations
 
             modelBuilder.Entity("MusicPlayer.Core.MusicArtist", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Biography")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("HasMetaData")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -53,6 +79,9 @@ namespace MusicPlayer.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(64);
+
+                    b.Property<string>("SortName")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -71,11 +100,31 @@ namespace MusicPlayer.Data.Migrations
                     b.Property<string>("Artist")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Bitrate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<uint>("DiscNumber")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Duration")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("HasMetaData")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Notation")
@@ -88,6 +137,9 @@ namespace MusicPlayer.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
+
+                    b.Property<uint>("TrackNumber")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

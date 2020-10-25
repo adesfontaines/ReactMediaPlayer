@@ -7,28 +7,32 @@ import { ApplicationState } from "../store";
 import * as NavigationStore from '../store/Navigation';
 import { Link } from "react-router-dom";
 
-function MusicDrawerTemplate() {
+type NavigationProps =
+  NavigationStore.NavigationState
+  & typeof NavigationStore.actionCreators;
+
+function MusicDrawerTemplate(props: NavigationProps) {
   const classes = MuiStyles();
   return (
     <div>
       <div className={classes.toolbar} />
       <Divider />
-      <List>
-        <ListItem button component={Link} to="/">
+      <List style={{ paddingTop: "0px" }}>
+        <ListItem selected={true} button component={Link} to="/">
           <ListItemIcon>
-            <HomeRounded />
+            <HomeRounded color="primary" />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
         <ListItem button component={Link} to="/tracks">
           <ListItemIcon>
-            <LibraryMusicRounded />
+            <LibraryMusicRounded color="primary" />
           </ListItemIcon>
           <ListItemText primary="Library" />
         </ListItem>
         <ListItem button component={Link} to="/explore">
           <ListItemIcon>
-            <ExploreRounded />
+            <ExploreRounded color="primary"/>
           </ListItemIcon>
           <ListItemText primary="Explore" />
         </ListItem>
@@ -37,13 +41,13 @@ function MusicDrawerTemplate() {
       <List>
         <ListItem button component={Link} to="/import">
           <ListItemIcon>
-            <AddCircleRounded />
+            <AddCircleRounded color="primary" />
           </ListItemIcon>
           <ListItemText primary={"Import media"} />
         </ListItem>
         <ListItem button component={Link} to="/settings">
           <ListItemIcon>
-            <SettingsRounded />
+            <SettingsRounded color="primary" />
           </ListItemIcon>
           <ListItemText primary={"Settings"} />
         </ListItem>

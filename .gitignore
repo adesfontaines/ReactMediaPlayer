@@ -10,3 +10,6 @@ MusicPlayer.MediaWorker/obj
 obj
 MusicPlayer/Logs
 .vs
+MediaPlayer.Server/bin
+MediaPlayer.Server/Logs
+*.db

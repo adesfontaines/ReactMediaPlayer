@@ -6,10 +6,10 @@
 } from "@material-ui/core/styles";
 
 const drawerWidth = 210;
-const footerPlayerHeight = 140;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
+    // All
     root: {
       position: "absolute",
       display: "flex",
@@ -20,21 +20,59 @@ export default makeStyles((theme: Theme) =>
       bottom: 0,
       overflowY: "hidden"
     },
+    mainContainer: {
+      width: "100%"
+    },
+    subContainer: {
+      padding: theme.spacing(3),
+      width: "100%"
+    },
+    // Components
+    mediaTable: {
+      backgroundColor: "none"
+    },
+    // Drawer
     drawer: {
       [theme.breakpoints.up("sm")]: {
         width: drawerWidth,
         flexShrink: 0
       }
     },
+    // Footer
     footer:
     {
-      height: footerPlayerHeight + "px",
+      backgroundColor: "#2e1534",
+      boxShadow: "0 0 5px rgba(0, 0, 0, 0.4)",
       zIndex: theme.zIndex.drawer + 2000,
     },
     footerControls: {
       padding: 3,
     },
+    mediaDurationButton: {
+      border: "none",
+      padding: 0,
+      animation: "none",
+      background: "none",
+      outline: 0,
+      '&:hover': {
+        outlineStyle: "none"
+      }
+    },
+    mediaButton: {
+      backgroundColor:"transparent",
+      border: "none",
+      verticalAlign: "middle",
+      color: theme.palette.common.white,
+      '&:focus': {
+        outlineStyle: "none"
+      }
+    },
+    // App Bar
     appBar: {
+      color: theme.palette.getContrastText("rgba(255,255,255,.7)"),
+      backgroundColor: "rgba(255,255,255,1)",
+      boxShadow: "none",
+      borderBottom: "2px",
       zIndex: theme.zIndex.drawer + 1,
       position: "relative",
     },
@@ -47,29 +85,7 @@ export default makeStyles((theme: Theme) =>
     grow: {
       flexGrow: 1
     },
-    mediaDurationButton: {
-      border: "none",
-      padding: 0,
-      background: "none",
-      outline: 0,
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-      width: drawerWidth,
-      zIndex: 5,
-      flexShrink: 0
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3)
-    },
-    title: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
-      },
-    },
+    // Search app bar
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
@@ -79,10 +95,11 @@ export default makeStyles((theme: Theme) =>
       },
       marginRight: theme.spacing(2),
       marginLeft: 0,
-      width: '100%',
+      width: '30ch',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: 'auto',
+        minWidth: '300px'
       },
     },
     searchIcon: {
@@ -93,6 +110,24 @@ export default makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    // Drawer
+    drawerPaper: {
+      backgroundColor: "rgba(255,255,255,.7)",
+      width: drawerWidth,
+      zIndex: 5,
+      flexShrink: 0
+    },
+    content: {
+      flexGrow: 1,
+    },
+    title: {
+      display: 'none',
+      [theme.breakpoints.up('sm')]: {
+        display: 'block',
+      },
     },
     inputRoot: {
       color: 'inherit',
@@ -124,6 +159,10 @@ export default makeStyles((theme: Theme) =>
     {
       width: "171px",
       height: "171px"
+    },
+    mediaTabs:
+    {
+      backgroundColor: theme.palette.background.paper
     }
   })
 );

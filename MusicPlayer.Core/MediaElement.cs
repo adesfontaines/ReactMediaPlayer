@@ -8,9 +8,10 @@ namespace MusicPlayer.Core
     {
         [Key]
         public string Id { get; set; }
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedDate { get; set; }
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime ModifiedDate { get; set; }
+        public bool HasMetaData { get; set; }
     }
 }

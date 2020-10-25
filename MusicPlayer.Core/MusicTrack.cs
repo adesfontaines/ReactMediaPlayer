@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using MediaPlayer.Core;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MusicPlayer.Core
 {
-  public class MusicTrack : MediaElement
+  public class MusicTrack : PlayableMedia
   {
     [Required, StringLength(128)]
     public string Title { get; set; }
@@ -14,10 +15,16 @@ namespace MusicPlayer.Core
     public string Artist { get; set; }
     [Required]
     public int Duration { get; set; }
+    [Required]
+    public string FilePath { get; set; }
     public int Notation { get; set; }
 
     public int SampleRate { get; set; }
-    [Required]
-    public string FilePath { get; set; }
-  }
+
+    public int Bitrate { get; set; }
+    public int Channels { get; set; }
+    public uint DiscNumber { get; set; }
+    public uint TrackNumber { get; set; }
+    public override string Source { get => FilePath; }
+    }
 }

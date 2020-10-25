@@ -30,5 +30,11 @@ export default createMuiTheme({
         transition: "none",
       }
     },
+    MuiLink: {
+      underlineHover:
+      {
+        textDecoration:"none"
+      }
+    }
   }
 });

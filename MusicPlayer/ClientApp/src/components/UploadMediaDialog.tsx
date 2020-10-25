@@ -16,7 +16,7 @@ function UploadMediaDialog(props: MusicTracksProps) {
   };
 
   return (
-    <div >
+    <div>
       <DropzoneArea
         onChange={(files) => props.importTracksFiles([""])}
         filesLimit={300}

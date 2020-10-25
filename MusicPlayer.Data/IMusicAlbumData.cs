@@ -7,10 +7,10 @@ namespace MusicPlayer.Data
   public interface IMusicAlbumData
   {
     Task<IEnumerable<MusicAlbum>> GetAlbumsByNameAsync(string searchQuery);
-    MusicAlbum GetById(int id);
+    MusicAlbum GetById(string id);
     MusicAlbum Update(MusicAlbum updatedTrack);
     MusicAlbum Add(MusicAlbum newTrack);
-    MusicAlbum Delete(int id);
+    MusicAlbum Delete(string id);
     int GetCountOfAlbums();
     int Commit();
   }

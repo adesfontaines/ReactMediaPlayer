@@ -1,4 +1,6 @@
 ﻿export default class MediaUtils {
+  static applicationBaseUri = 'https://' + window.location.hostname + ':6086';
+
   static formatTimeLabel(given_seconds: number): string {
 
     given_seconds = Math.trunc(given_seconds);
@@ -10,7 +12,9 @@
       seconds.toString().padStart(2, '0');
   }
   static getMusicStreamURL(trackId: string): string {
-
-    return "https://" + window.location.hostname + "/api/musictracks/stream/" + trackId;
+    return `${MediaUtils.applicationBaseUri}/api/tracks/stream/${trackId}`;
+  }
+  static getAlbumCoverURL(albumId: string): string {
+    return `${MediaUtils.applicationBaseUri}/api/albums/cover/${albumId}`;
   }
 }

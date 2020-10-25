@@ -1,81 +1,132 @@
 /* Provide sufficient contrast against white background */
 body {
-  padding-bottom: 75px;
-  background: #f4f7fa;
+    padding-bottom: 75px;
+    background: #f4f7fa;
 }
 
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 code {
-  color: #e01a76;
+    color: #e01a76;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0px;
+    margin-block-start:0px;
+}
+.no-focus:focus {
+    outline: none;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.tracks-list td,
-.tracks-list th {
-  vertical-align: middle;
-  border: none;
-  padding: 10px;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .tracks-list td {
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
+    vertical-align: middle;
+    border: none;
+    padding: 10px;
+}
+
+.tracks-list td {
+    cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .musicNameLabel {
-  align-self: center;
+    align-self: center;
+    margin-left: 12px;
 }
+
 .albumCardMedia {
-  width: 171px;
-  height: 171px;
+    width: 171px;
+    height: 171px;
 }
+
 ::-webkit-scrollbar {
-  width: 14px;
+    width: 14px;
 }
 
 ::-webkit-scrollbar-thumb {
-  min-height: 50px;
-  border: 3px solid transparent;
-  border-radius: 8px;
-  background-color: hsla(0, 0%, 100%, 0.4);
-  background-clip: padding-box;
+    min-height: 50px;
+    border: 3px solid transparent;
+    border-radius: 8px;
+    background-color: rgba(117, 117, 117, 0.4);
+    background-clip: padding-box;
 }
 
 main {
-  position: relative;
-  flex-grow: 1;
-  overflow-x: hidden;
-  flex-direction: row;
-  display: flex;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+    position: relative;
+    flex-grow: 1;
+    overflow-x: hidden;
+    flex-direction: row;
+    display: flex;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
+
 .media-infos-content {
-  margin-left: 8px;
+    margin-left: 8px;
 }
+
 .flat-button {
-  background-color: transparent;
-  border: none;
+    background-color: transparent;
+    border: none;
 }
+
+    .flat-button:focus {
+        outline: none;
+    }
+
 .flat-link {
-  color: gray;
+    color: gray;
 }
-.flat-link:hover {
-  text-decoration: none;
-  color: whitesmoke;
-}
+
+    .flat-link:hover {
+        text-decoration: none;
+        color: whitesmoke;
+    }
+
 .no-wrap {
-  overflow-x: hidden;
-  white-space: nowrap;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.coverPlayButton {
+    border-radius: 5px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+    border: none;
+    background-color: #8080807a;
+}
+
+tr:hover .coverPlayButton {
+    opacity: 0.8;
+}
+.bar:hover {
+    transition: none;
+}
+
+.page-footer {
+    z-index: 10;
+    position: relative;
+}
+
+.media-title {
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.media-cover {
+    border-radius: 5px;
+    min-width: 48px;
+    min-height: 48px;
+    box-shadow: 2px 2px 7px 0px #65656578;
 }

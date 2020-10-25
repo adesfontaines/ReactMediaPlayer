@@ -1,6 +1,7 @@
 import * as MusicPlayer from './MusicPlayer';
 import * as MusicTracks from './MusicTracks';
 import * as MusicAlbums from './MusicAlbums';
+import * as MusicArtists from './MusicArtists';
 import * as Navigation  from './Navigation';
 
 // The top-level state object
@@ -8,6 +9,7 @@ export interface ApplicationState {
   musicPlayer: MusicPlayer.MusicPlayerState | undefined;
   musicTracks: MusicTracks.MusicTracksState | undefined;
   musicAlbums: MusicAlbums.MusicAlbumsState | undefined;
+  musicArtists: MusicArtists.MusicArtistsState | undefined;
   navigation: Navigation.NavigationState | undefined;
 }
 
@@ -18,6 +20,7 @@ export const reducers = {
   musicPlayer: MusicPlayer.reducer,
   musicTracks: MusicTracks.reducer,
   musicAlbums: MusicAlbums.reducer,
+  musicArtists: MusicArtists.reducer,
   navigation: Navigation.reducer
 };
 

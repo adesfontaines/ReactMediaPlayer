@@ -1,0 +1,16 @@
+{
+    "ServerName": "My media server",
+    "UserAnalytics": false,
+    "Features": {
+        "CanDownload": true,
+        "CanImport": false
+    },
+    "ConnectionStrings": {
+        "MusicPlayerDb": "Data Source=music-player.db"
+    },
+    "FoldersMapping": {
+        "MusicLibrary": "C:\\Users\\ADE\\Music\\",
+        "AlbumsCover": "C:\\Users\\ADE\\OneDrive - SOFTFLUENT O365\\Images\\Covers\\",
+        "ArtistsPicture": "C:\\Users\\ADE\\OneDrive - SOFTFLUENT O365\\Images\\Artists\\"
+    }
+}

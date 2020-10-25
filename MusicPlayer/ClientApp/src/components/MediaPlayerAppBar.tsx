@@ -100,7 +100,7 @@ function MediaPlayerAppBar(props: NavigationProps) {
   }
   return (
     <AppBar className={classes.appBar}>
-      <Toolbar>
+      <Toolbar variant="dense">
         <IconButton
           edge="start"
           className={classes.menuButton}
@@ -108,7 +108,7 @@ function MediaPlayerAppBar(props: NavigationProps) {
           onClick={handleDrawerToggle}
           aria-label="open drawer"
         >
-          <MenuIcon />
+          <MenuIcon color="primary"/>
         </IconButton>
 
         <Typography className={classes.title} variant="h6" noWrap>
@@ -117,10 +117,11 @@ function MediaPlayerAppBar(props: NavigationProps) {
 
         <div className={classes.search}>
           <div className={classes.searchIcon}>
-            <SearchIcon />
+            <SearchIcon color="primary"/>
           </div>
           <InputBase
             placeholder="Search songs, artist, albums…"
+            fullWidth={true}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,
@@ -134,12 +135,12 @@ function MediaPlayerAppBar(props: NavigationProps) {
         <div className={classes.sectionDesktop}>
           <IconButton aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <MailIcon />
+              <MailIcon color="primary" />
             </Badge>
           </IconButton>
           <IconButton aria-label="show 17 new notifications" color="inherit">
             <Badge badgeContent={17} color="secondary">
-              <NotificationsIcon />
+              <NotificationsIcon color="primary" />
             </Badge>
           </IconButton>
           <IconButton

@@ -48,6 +48,14 @@ namespace MusicPlayer.Data
 
             return result;
         }
+        public async Task<IEnumerable<MusicTrack>> GetAllAsync()
+        {
+            var result = await (from r in db.Tracks
+                                orderby r.CreatedDate descending
+                                select r).ToListAsync();
+
+            return result;
+        }
 
         public MusicTrack Update(MusicTrack updatedRestaurant)
         {
@@ -69,6 +77,14 @@ namespace MusicPlayer.Data
                 db.Tracks.Remove(track);
             }
             return track;
+        }
+
+        public async Task<IEnumerable<string>> GetAllFilePath()
+        {
+            var result = await(from r in db.Tracks
+                               select r.FilePath).ToListAsync();
+
+            return result;
         }
     }
 }

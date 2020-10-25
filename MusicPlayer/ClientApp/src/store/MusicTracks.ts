@@ -1,5 +1,7 @@
 ﻿import { Action, Reducer } from "redux";
 import { AppThunkAction } from ".";
+import MusicTrack from "./Entities/MusicTrack";
+import MediaUtils from "../MediaUtils";
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -8,17 +10,7 @@ export interface MusicTracksState {
   searchQuery?: string;
   previousSearchQuery?: string;
   tracks: MusicTrack[];
-}
-
-export interface MusicTrack {
-  id: string;
-  title: string;
-  album: string;
-  artist: string;
-  duration: number;
-  notation: number;
-  samplerate: number;
-  filepath: string;
+  currentTrack: MusicTrack;
 }
 
 // -----------------
@@ -43,6 +35,9 @@ interface ImportTracksDirectory {
   type: "IMPORT_TRACKS_DIRECTORY";
   directoryPath: string;
 }
+// Imported
+interface MediaSetQueue { type: "MEDIA_SET_QUEUE", tracks: MusicTrack[] }
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 type KnownAction = RequestTracksAction | ReceiveTracksSuccessAction | ImportTracksFiles | ImportTracksDirectory;
@@ -56,9 +51,10 @@ export const actionCreators = {
   requestMusicTracks: (searchQuery: string | undefined): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
     console.log("request tracks action creator");
+    console.log(MediaUtils.applicationBaseUri + '/api/tracks/get');
     dispatch({ type: "REQUEST_TRACKS", searchQuery: searchQuery } as RequestTracksAction);
 
-    fetch('api/musictracks/')
+    fetch(MediaUtils.applicationBaseUri + '/api/tracks/get')
       .then(responses => responses.json() as Promise<MusicTrack[]>)
       .then(data => dispatch({ type: "RECEIVE_TRACKS_SUCCESS", tracks: data, searchQuery: searchQuery } as ReceiveTracksSuccessAction))
       .catch(error => console.log("MusicTracks fetch failed : " + error));
@@ -69,9 +65,10 @@ export const actionCreators = {
     console.log("import tracks directory...");
     var data = new FormData();
     data.append("files", JSON.stringify(files));
-    fetch('api/musictracks/import', { method: "POST", body: data })
+    fetch(MediaUtils.applicationBaseUri + '/api/tracks/import', { method: "POST", body: data })
       .then(responses => console.log("importracks respnse:", responses.json()));
-  }
+  },
+  setQueue: (tracks: MusicTrack[]) => ({ type: 'MEDIA_SET_QUEUE', tracks:tracks } as MediaSetQueue), 
 };
 
 // ----------------
@@ -89,9 +86,7 @@ export const reducer: Reducer<MusicTracksState> = (state: MusicTracksState | und
     case "REQUEST_TRACKS":
       return { ...state, searchQuery: action.searchQuery, isLoading: true };
     case "RECEIVE_TRACKS_SUCCESS": {
-      console.log("state.searchQuery: " + state.searchQuery + " action.searchQuery: " + action.searchQuery)
       if (state.searchQuery == action.searchQuery) {
-        console.log("Receive tracks: " + action.tracks)
         return { ...state, tracks: action.tracks, isLoading: false };
       }
       return state;

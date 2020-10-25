@@ -1,7 +1,7 @@
 ﻿import ReactPlayer from 'react-player/lazy';
 import { Action, Reducer } from 'redux';
 import MediaUtils from '../MediaUtils';
-import { MusicTrack } from './MusicTracks';
+import MusicTrack from './Entities/MusicTrack';
 
 export interface MusicPlayerState {
   isPlaying: boolean;
@@ -125,11 +125,16 @@ export const reducer: Reducer<MusicPlayerState> = (state: MusicPlayerState | und
     case "SET_PLAYER":
       return { ...state, playerInstance: action.player };
     case "MEDIA_PUSH_QUEUE":
-      state.tracksQueue.push(action.track);
+      state.tracksQueue.push(action.track); 
       state.tracksQueueURL.push(MediaUtils.getMusicStreamURL(action.track.id));
       return state;
     case "MEDIA_SET_QUEUE":
-      return { ...state, tracksQueue: action.tracks, tracksQueueURL: action.tracks.map(x => (MediaUtils.getMusicStreamURL(x.id))) };
+      return {
+        ...state, tracksQueue: action.tracks, tracksQueueURL: action.tracks.map(x => (MediaUtils.getMusicStreamURL(x.id))),
+        isPlaying: true,
+        timePosition: 0,
+        timePositionSeconds: 0,
+        timeProgressBarValue: 0 };
     case "MEDIA_PLAY":
       return { ...state, isPlaying: true };
     case "MEDIA_PAUSE":

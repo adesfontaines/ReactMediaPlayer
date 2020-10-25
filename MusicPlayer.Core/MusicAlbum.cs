@@ -10,8 +10,8 @@ namespace MusicPlayer.Core
     {
     [Required, StringLength(128)]
     public string Title { get; set; }
+    public string SortableTitle { get; set; }
     public string Artists { get; set; }
     public int Year { get; set; }
-    public Blob Cover { get; set; }
   }
 }

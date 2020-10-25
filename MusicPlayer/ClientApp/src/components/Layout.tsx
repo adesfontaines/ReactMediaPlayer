@@ -18,7 +18,7 @@ export default (props: { children?: React.ReactNode }) => (
         <main className={MuiStyles().content}>
           <div className={MuiStyles().toolbar} />
           <MusicPlayerDrawer />
-          <Container>
+          <Container className={MuiStyles().mainContainer}>
             {props.children}
           </Container>
         </main>

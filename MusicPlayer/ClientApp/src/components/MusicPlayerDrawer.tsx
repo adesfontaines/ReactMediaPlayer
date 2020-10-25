@@ -15,6 +15,7 @@ type NavigationProps =
 function MusicPlayerDrawerElement(props: NavigationProps) {
   const classes = MuiStyles();
   const theme = MuiTheme;
+
   return (
     <nav className={classes.drawer} aria-label="mailbox folders" >
       <Hidden smUp implementation="css" >
@@ -24,7 +25,7 @@ function MusicPlayerDrawerElement(props: NavigationProps) {
           open={props.isMobileOpen}
           onClose={props.toggleMobileDrawer}
           classes={{
-            paper: classes.drawerPaper
+            paper: classes.drawer,
           }}
           ModalProps={{
             keepMounted: true // Better open performance on mobile.
